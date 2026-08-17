@@ -8,6 +8,8 @@ import RecentScanCard from '../components/RecentScanCard';
 import OwlAssistant from '../components/OwlAssistant';
 import BottomNavigation from '../components/BottomNavigation';
 import { analyzeFood } from '../services/foodService';
+import goalsService from '../services/goalsService';
+import profileService from '../services/profileService';
 
 const mockRecent = [
   { id: 1, food: 'Chicken Biryani', calories: 580, time: '2h ago', image: '/placeholder1.jpg' },
@@ -27,20 +29,25 @@ export default function FoodScanner() {
     try {
       const res = await analyzeFood(imageBlob);
       setResult(res);
-        // notify goals service that a scan occurred (increment scan goal)
-        try {
-          const goalsService = await import('../services/goalsService');
-          if (goalsService && goalsService.default) goalsService.default.incrementProgress('scan', 1);
-        } catch (e) {
-          console.warn('Could not notify goals service', e);
-        }
+      try {
+        profileService.recordMealScan({
+          food: res.food,
+          calories: res.calories,
+          protein: res.protein,
+          carbs: res.carbs,
+          water: Number((res.water || 0).toFixed(1))
+        });
+        goalsService.incrementProgress('scan', 1);
+        profileService.refreshDerivedProfile();
       } catch (e) {
-        console.error(e);
-      } finally {
-        // keep loading a little to show animation
-        setTimeout(() => setLoading(false), 800);
+        console.warn('Could not sync scanned meal data', e);
       }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setTimeout(() => setLoading(false), 800);
     }
+  }
 
   return (
     <div className="min-h-screen bg-cream font-poppins text-darkgreen p-4 pb-32">

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import OwlAssistant from '../components/OwlAssistant';
 import BottomNavigation from '../components/BottomNavigation';
 import goalsService from '../services/goalsService';
+import profileService from '../services/profileService';
 import GoalCard from '../components/GoalCard';
 import GoalEditor from '../components/GoalEditor';
 
@@ -28,9 +29,10 @@ export default function Goals() {
   }, []);
 
   function handleIncrement(goal) {
-    // increment by 1 (or a sensible amount for numeric goals)
-    const amount = goal.type === 'number' ? 10 : 1; // for protein add 10g per tap as a friendly increment
+    const amount = goal.type === 'number' ? 10 : 1;
     goalsService.incrementProgress(goal.id, amount);
+    profileService.markActivityToday();
+    profileService.refreshDerivedProfile();
     setMessage("Nice progress!");
     clearMessageLater();
   }
@@ -45,6 +47,8 @@ export default function Goals() {
 
   function handleSave(edited) {
     goalsService.updateGoal(edited.id, { target: edited.target });
+    profileService.markActivityToday();
+    profileService.refreshDerivedProfile();
     setEditing(null);
   }
 
