@@ -262,24 +262,7 @@ export function getDefaultProfile() {
   return { ...defaultProfile, preferences: { ...defaultProfile.preferences }, notifications: { ...defaultProfile.notifications }, weeklyActivity: { ...defaultProfile.weeklyActivity }, progress: { ...defaultProfile.progress, calories: { ...defaultProfile.progress.calories }, protein: { ...defaultProfile.progress.protein }, carbs: { ...defaultProfile.progress.carbs }, water: { ...defaultProfile.progress.water } } };
 }
 
-export function load() {
-  return loadProfile();
-}
-
-export function save(profile) {
-  return saveProfile(profile);
-}
-
-export function clear() {
-  localStorage.removeItem(STORAGE_KEY);
-  notifyListeners(defaultProfile);
-  return defaultProfile;
-}
-
 export default {
-  load,
-  save,
-  clear,
   loadProfile,
   saveProfile,
   updateProfile,

@@ -13,7 +13,7 @@ export default function BottomNavigation({ active = 'scan' }) {
   return (
     <nav className="fixed left-4 right-4 bottom-4 bg-white rounded-3xl shadow-lg p-4 flex items-center justify-between">
       {items.map(i => (
-        <NavLink key={i.key} to={i.to} className={`flex-1 flex flex-col items-center gap-1 text-sm ${active === i.key ? 'text-green-600' : 'text-gray-500'}`}>
+        <NavLink key={i.key} to={i.to} aria-label={`Navigate to ${i.label}`} className={`flex-1 flex flex-col items-center gap-1 text-sm ${active === i.key ? 'text-green-600' : 'text-gray-500'}`}>
           <div className={`w-10 h-10 rounded-full flex items-center justify-center ${active === i.key ? 'bg-green-50' : ''}`}>{i.icon}</div>
           <div className="text-xs">{i.label}</div>
         </NavLink>
