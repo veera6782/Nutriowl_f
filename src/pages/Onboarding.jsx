@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import OwlAssistant from '../components/OwlAssistant';
 import profileService from '../services/profileService';
@@ -59,15 +59,6 @@ export default function Onboarding() {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const existing = profileService.load();
-    if (existing && existing.onboardingCompleted) {
-      navigate('/', { replace: true });
-    }
-  }, [navigate]);
-
-  const canSubmit = useMemo(() => Object.keys(validate(form)).length === 0, [form]);
-
   function handleField(key, value) {
     const next = { ...form, [key]: value };
     setForm(next);
@@ -100,8 +91,8 @@ export default function Onboarding() {
       onboardingCompleted: true
     };
 
-    profileService.save(profile);
-    navigate('/', { replace: true });
+    profileService.saveProfile(profile);
+    navigate('/home', { replace: true });
   }
 
   return (
@@ -292,8 +283,7 @@ export default function Onboarding() {
 
           <button
             type="submit"
-            disabled={!canSubmit}
-            className={`mt-4 flex w-full items-center justify-center rounded-full bg-green-600 px-6 py-4 text-center text-[26px] font-bold text-white shadow-[0_10px_20px_rgba(76,175,80,0.25)] transition ${!canSubmit ? 'cursor-not-allowed bg-[#a9d9aa]' : 'hover:bg-green-700'}`}
+            className="mt-4 flex w-full items-center justify-center rounded-full bg-green-600 px-6 py-4 text-center text-[26px] font-bold text-white shadow-[0_10px_20px_rgba(76,175,80,0.25)] transition hover:bg-green-700"
           >
             <span>Continue</span>
             <span className="ml-3 text-2xl">→</span>

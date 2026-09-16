@@ -7,9 +7,11 @@ import RecentScanCard from '../components/RecentScanCard';
 import TipsCard from '../components/TipsCard';
 import goalsService from '../services/goalsService';
 import scanService from '../services/scanService';
+import profileService from '../services/profileService';
 
 export default function Home() {
   const navigate = useNavigate();
+  const [profile, setProfile] = useState(() => profileService.loadProfile());
   const [goals, setGoals] = useState([]);
   const [scans, setScans] = useState([]);
 
@@ -26,10 +28,12 @@ export default function Home() {
 
     // subscribe scans
     const unsubS = scanService.subscribe(s => setScans(s || []));
+    const unsubP = profileService.subscribe(nextProfile => setProfile(nextProfile));
 
     return () => {
       if (unsubG) unsubG();
       if (unsubS) unsubS();
+      if (unsubP) unsubP();
     };
   }, []);
 
@@ -42,12 +46,13 @@ export default function Home() {
   }
 
   const dailyGoals = goals.filter(g => g.daily);
+  const displayName = profile?.name?.trim() || 'Friend';
 
   return (
     <div className="min-h-screen bg-cream font-poppins text-darkgreen p-4 pb-32">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Hello, Friend! 👋</h1>
+          <h1 className="text-3xl font-bold">Hello, {displayName}! 👋</h1>
           <p className="text-sm text-gray-600 mt-1">Let’s make today a <span className="text-green-600">healthy</span> day!</p>
         </div>
         <div className="w-28 h-28">

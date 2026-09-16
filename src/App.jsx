@@ -9,32 +9,25 @@ import History from './pages/History';
 import Onboarding from './pages/Onboarding';
 
 function StartupGate() {
-  const raw = typeof window !== 'undefined' ? localStorage.getItem('nutriowl_profile') : null;
-
-  try {
-    const profile = raw ? JSON.parse(raw) : null;
-    if (profile && profile.onboardingCompleted) {
-      return <Home />;
-    }
-  } catch (error) {
-    console.warn('Ignoring malformed profile data for onboarding check.', error);
-  }
-
   return <Onboarding />;
 }
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<StartupGate />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/onboarding" element={<Onboarding />} />
-      <Route path="/scan" element={<FoodScanner />} />
-      <Route path="/goals" element={<Goals />} />
-      <Route path="/chat" element={<Chat />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/history" element={<History />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <div className="min-h-screen bg-[#e9f0e5]">
+      <div className="mx-auto min-h-screen w-full max-w-[420px] overflow-x-hidden bg-cream shadow-[0_0_30px_rgba(46,94,62,0.12)]">
+        <Routes>
+          <Route path="/" element={<StartupGate />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/scan" element={<FoodScanner />} />
+          <Route path="/goals" element={<Goals />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/history" element={<History />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
+    </div>
   );
 }

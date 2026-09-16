@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ChatMessage from '../components/ChatMessage';
 import ChatInput from '../components/ChatInput';
-import QuickTopics from '../components/QuickTopics';
 import nutriService from '../services/nutriOwlChat';
 import BottomNavigation from '../components/BottomNavigation';
 
@@ -96,10 +95,6 @@ export default function Chat() {
     }
   }
 
-  function handleQuick(topic) {
-    sendMessage(topic);
-  }
-
   return (
     <div className="min-h-screen bg-cream p-6 pb-32">
       <div className="max-w-3xl mx-auto">
@@ -120,9 +115,6 @@ export default function Chat() {
               <div className="font-semibold text-green-800">Hi there! 👋</div>
               <div className="text-gray-600">Ask me anything about nutrition, healthy eating or your diet!</div>
             </div>
-            <div className="ml-auto">
-              <button className="px-3 py-2 bg-white rounded-full shadow-sm">Topics</button>
-            </div>
           </div>
         </section>
 
@@ -132,11 +124,7 @@ export default function Chat() {
           ))}
         </div>
 
-        <div className="mb-4">
-          <QuickTopics onChoose={handleQuick} />
-        </div>
-
-        <div className="fixed left-6 right-6 bottom-24 bg-transparent p-4">
+        <div className="fixed bottom-24 left-1/2 w-[calc(100%-3rem)] max-w-[372px] -translate-x-1/2 bg-transparent">
           <ChatInput onSend={sendMessage} disabled={loading} />
         </div>
 
