@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import OwlAssistant from '../components/OwlAssistant';
 import profileService from '../services/profileService';
+import * as apiClient from '../services/apiClient';
 
 const initialForm = {
   name: '',
@@ -57,6 +58,8 @@ function validate(form) {
 export default function Onboarding() {
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
+  const [saving, setSaving] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const navigate = useNavigate();
 
   function handleField(key, value) {
@@ -78,7 +81,7 @@ export default function Onboarding() {
     handleField('goals', goals);
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const nextErrors = validate(form);
     setErrors(nextErrors);
@@ -91,7 +94,16 @@ export default function Onboarding() {
       onboardingCompleted: true
     };
 
-    profileService.saveProfile(profile);
+    setSubmitError('');
+    setSaving(true);
+    try {
+      profileService.saveProfile(profile);
+      await apiClient.saveProfile(profile);
+    } catch (error) {
+      setSubmitError(error.message);
+      setSaving(false);
+      return;
+    }
     navigate('/home', { replace: true });
   }
 
@@ -283,11 +295,13 @@ export default function Onboarding() {
 
           <button
             type="submit"
-            className="mt-4 flex w-full items-center justify-center rounded-full bg-green-600 px-6 py-4 text-center text-[26px] font-bold text-white shadow-[0_10px_20px_rgba(76,175,80,0.25)] transition hover:bg-green-700"
+            disabled={saving}
+            className="mt-4 flex w-full items-center justify-center rounded-full bg-green-600 px-6 py-4 text-center text-[26px] font-bold text-white shadow-[0_10px_20px_rgba(76,175,80,0.25)] transition hover:bg-green-700 disabled:cursor-wait disabled:opacity-60"
           >
-            <span>Continue</span>
+            <span>{saving ? 'Saving...' : 'Continue'}</span>
             <span className="ml-3 text-2xl">→</span>
           </button>
+          {submitError && <p className="mt-2 text-center text-sm text-red-600">{submitError}</p>}
         </form>
 
         <div className="mt-4 flex items-center justify-center gap-2 pb-4 text-[12px] text-gray-500">

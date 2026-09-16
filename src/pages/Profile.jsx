@@ -4,6 +4,7 @@ import OwlAssistant from '../components/OwlAssistant';
 import BottomNavigation from '../components/BottomNavigation';
 import goalsService from '../services/goalsService';
 import profileService from '../services/profileService';
+import * as apiClient from '../services/apiClient';
 
 const dayOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 const shortDays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
@@ -189,9 +190,10 @@ export default function Profile() {
     }));
   };
 
-  const handleSaveProfile = () => {
+  const handleSaveProfile = async () => {
     const saved = profileService.updateProfile(draft);
     setProfile(saved);
+    await apiClient.saveProfile(saved);
     setModalType(null);
   };
 

@@ -22,3 +22,14 @@ Notes:
 - analyzeFood in services returns mocked JSON and simulates latency.
 - Framer Motion is used for subtle animations and the loading overlay.
 - This is a component-level implementation. To run as a full app, ensure React, React Router, Framer Motion, Tailwind and other deps are installed and tailwind is configured in your build pipeline.
+
+## Backend
+
+The Goals API is provided by `server/server.js` and persists user profiles and wellness plans in `data/nutriowl.json`. Start it separately from Vite:
+
+```bash
+npm run api
+npm run dev
+```
+
+The frontend sends the onboarding email as the current-user identifier through `X-User-Email`. The API provides `GET /api/profile`, `GET /api/goals`, `POST /api/profile`, `POST /api/goals/generate`, `PATCH /api/goals/preferences`, and goal progress updates. This project has no authentication provider yet, so the email identifier should be replaced by the project authentication subject when authentication is added.
