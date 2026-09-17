@@ -1,3 +1,119 @@
 {
-  "users": {}
+  "users": {
+    "jerm@gmail.com": {
+      "profile": {
+        "name": "Jeremy",
+        "email": "jerm@gmail.com",
+        "age": 12,
+        "heightCm": 198,
+        "weightKg": 98,
+        "activityLevel": "low",
+        "goal": "strength",
+        "onboardingCompleted": true
+      },
+      "goals": {
+        "userId": "jerm@gmail.com",
+        "activityLevel": "low",
+        "primaryGoal": "strength",
+        "fruitPreference": {
+          "servings": 2
+        },
+        "hydrationReminder": 9,
+        "wellnessPlan": {
+          "breakfast": [
+            "Whole grain or starch",
+            "Fruit",
+            "Eggs, yogurt, beans, paneer or tofu",
+            "Milk or a suitable alternative"
+          ],
+          "morningSnack": [
+            "Fruit or vegetables",
+            "Yogurt, nuts, seeds or another protein-containing food"
+          ],
+          "lunch": [
+            "Grain or starch",
+            "Vegetables",
+            "Beans, lentils, paneer, tofu, fish or chicken where appropriate",
+            "Fruit"
+          ],
+          "afternoonSnack": [
+            "A fruit or vegetable option",
+            "Whole-grain food with yogurt, hummus, nuts or seeds"
+          ],
+          "dinner": [
+            "Grain or starch",
+            "Vegetables",
+            "A protein-containing food",
+            "A healthy fat source such as avocado, olive oil, nuts or seeds"
+          ],
+          "hydration": "Hydration reminder: 9 glasses. Drink regularly and more during heat or activity.",
+          "activityHabit": "Add gradual everyday movement, such as walking, play or active breaks. Choose regular protein-containing foods and balanced recovery meals.",
+          "tips": [
+            "Try different colors and food groups through the week.",
+            "Avoid skipping meals; ask a trusted adult for help with food choices.",
+            "These are general wellness ideas, not medical advice."
+          ],
+          "generatedAt": "2026-09-17T11:02:31.058Z"
+        },
+        "createdAt": "2026-09-17T11:02:31.056Z",
+        "updatedAt": "2026-09-17T11:02:31.058Z"
+      },
+      "goalItems": [
+        {
+          "id": "scan",
+          "title": "Scan a meal",
+          "type": "count",
+          "unit": "meal scanned",
+          "target": 1,
+          "progress": 0,
+          "daily": true
+        },
+        {
+          "id": "protein",
+          "title": "Eat enough proteins",
+          "type": "number",
+          "unit": "g",
+          "target": 50,
+          "progress": 0,
+          "daily": true
+        },
+        {
+          "id": "fruits",
+          "title": "Eat fruits",
+          "type": "count",
+          "unit": "servings",
+          "target": 2,
+          "progress": 0,
+          "daily": true
+        },
+        {
+          "id": "water",
+          "title": "Hydration reminder: 9 glasses",
+          "type": "count",
+          "unit": "glasses",
+          "target": 9,
+          "progress": 0,
+          "daily": true
+        },
+        {
+          "id": "active",
+          "title": "Be active 5 days this week",
+          "type": "count",
+          "unit": "days",
+          "target": 5,
+          "progress": 0,
+          "daily": false
+        },
+        {
+          "id": "healthyMeals",
+          "title": "Make healthy food choices",
+          "type": "count",
+          "unit": "healthy meals",
+          "target": 20,
+          "progress": 0,
+          "daily": false
+        }
+      ]
+    }
+  }
 }

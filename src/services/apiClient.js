@@ -18,7 +18,18 @@ async function request(path, options = {}) {
       ...(options.headers || {})
     }
   });
-  const body = await response.json();
+  const responseText = await response.text();
+  let body = null;
+  if (responseText.trim()) {
+    try {
+      body = JSON.parse(responseText);
+    } catch {
+      body = null;
+    }
+  }
+  if (!body) {
+    throw new Error(`The NutriOwl backend returned an unexpected response (${response.status}).`);
+  }
   if (!response.ok) throw new Error(body.error || 'The NutriOwl backend request failed.');
   return body;
 }

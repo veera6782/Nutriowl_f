@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const databasePath = path.join(__dirname, '..', 'data', 'nutriowl.json');
-const port = Number(process.env.API_PORT || 3001);
+const port = Number(process.env.API_PORT || 3002);
 
 const defaultGoals = [
   { id: 'scan', title: 'Scan a meal', type: 'count', unit: 'meal scanned', target: 1, progress: 0, daily: true },
