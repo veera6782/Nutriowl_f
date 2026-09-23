@@ -96,14 +96,13 @@ export default function Onboarding() {
 
     setSubmitError('');
     setSaving(true);
+    profileService.saveProfile(profile);
     try {
-      profileService.saveProfile(profile);
       await apiClient.saveProfile(profile);
     } catch (error) {
-      setSubmitError(error.message);
-      setSaving(false);
-      return;
+      console.warn('Unable to sync profile with the NutriOwl backend', error);
     }
+    setSaving(false);
     navigate('/home', { replace: true });
   }
 
