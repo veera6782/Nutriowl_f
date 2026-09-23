@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import OwlAssistant from '../components/OwlAssistant';
 import BottomNavigation from '../components/BottomNavigation';
 import GoalCard from '../components/GoalCard';
 import RecentScanCard from '../components/RecentScanCard';
@@ -56,7 +55,7 @@ export default function Home() {
           <p className="text-sm text-gray-600 mt-1">Let’s make today a <span className="text-green-600">healthy</span> day!</p>
         </div>
         <div className="w-28 h-28">
-          <OwlAssistant />
+          <img src="/nutriowl_mascot_full.jpg" alt="NutriOwl mascot" className="w-full h-full object-contain" />
         </div>
       </div>
 
