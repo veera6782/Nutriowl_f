@@ -96,9 +96,9 @@ export default function Chat() {
   }
 
   return (
-    <div className="min-h-screen bg-cream p-6 pb-32">
-      <div className="max-w-3xl mx-auto">
-        <header className="flex items-center justify-between mb-4">
+    <div className="h-dvh overflow-hidden bg-cream">
+      <div className="mx-auto flex h-full max-w-3xl flex-col px-6 pt-6 pb-28">
+        <header className="mb-4 flex shrink-0 items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-green-800">NutriOwl Chat</h1>
             <p className="text-gray-600">Your friendly nutrition buddy is here to help!</p>
@@ -108,7 +108,7 @@ export default function Chat() {
           </div>
         </header>
 
-        <section className="bg-green-50 rounded-2xl p-4 shadow-inner mb-4">
+        <section className="mb-4 shrink-0 rounded-2xl bg-green-50 p-4 shadow-inner">
           <div className="flex items-start gap-4">
             <div className="h-12 w-12 overflow-hidden rounded-full bg-white p-1 shadow-sm">
               <img src="/nutriowl_mascot_full.jpg" alt="NutriOwl mascot" className="h-full w-full rounded-full object-cover" />
@@ -120,14 +120,16 @@ export default function Chat() {
           </div>
         </section>
 
-        <div ref={listRef} className="bg-white rounded-2xl p-6 shadow-sm h-[60vh] overflow-auto mb-4">
-          {messages.map(m => (
-            <ChatMessage key={m.id} message={m} />
-          ))}
-        </div>
+        <div className="flex min-h-0 flex-1 flex-col rounded-2xl bg-white p-4 shadow-sm">
+          <div ref={listRef} className="min-h-0 flex-1 overflow-y-auto py-2">
+            {messages.map(m => (
+              <ChatMessage key={m.id} message={m} />
+            ))}
+          </div>
 
-        <div className="sticky bottom-0 z-20 mt-3 bg-[#f7f9f4]/90 pt-3 backdrop-blur-sm">
-          <ChatInput onSend={sendMessage} disabled={loading} />
+          <div className="mt-3 shrink-0 border-t border-green-50 bg-white pt-3">
+            <ChatInput onSend={sendMessage} disabled={loading} />
+          </div>
         </div>
 
         <BottomNavigation active="chat" />
