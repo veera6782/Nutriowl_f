@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { FiActivity, FiBell, FiCalendar, FiCheck, FiChevronRight, FiDroplet, FiHelpCircle, FiLogOut, FiSettings, FiShield, FiTarget, FiUser, FiZap } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import BottomNavigation from '../components/BottomNavigation';
+import DropdownSelect from '../components/DropdownSelect';
 import goalsService from '../services/goalsService';
 import profileService from '../services/profileService';
 import * as apiClient from '../services/apiClient';
@@ -390,12 +391,12 @@ export default function Profile() {
               </div>
               <div>
                 <label htmlFor="diet-preference" className="mb-2 block text-sm font-medium text-darkgreen">Diet Preference</label>
-                <select id="diet-preference" aria-label="Diet Preference" value={draft.preferences?.dietPreference || 'Vegetarian'} onChange={(event) => updateDraft({ preferences: { dietPreference: event.target.value } })} className="w-full rounded-2xl border border-[#dfe7d5] bg-white px-3 py-3 text-darkgreen focus:outline-none">
-                  <option value="Vegetarian">Vegetarian</option>
-                  <option value="Non-vegetarian">Non-vegetarian</option>
-                  <option value="Vegan">Vegan</option>
-                  <option value="Pescatarian">Pescatarian</option>
-                </select>
+                <DropdownSelect id="diet-preference" ariaLabel="Diet Preference" value={draft.preferences?.dietPreference || 'Vegetarian'} onChange={value => updateDraft({ preferences: { dietPreference: value } })} options={[
+                  { value: 'Vegetarian', label: 'Vegetarian' },
+                  { value: 'Non-vegetarian', label: 'Non-vegetarian' },
+                  { value: 'Vegan', label: 'Vegan' },
+                  { value: 'Pescatarian', label: 'Pescatarian' }
+                ]} />
               </div>
             </div>
           )}
@@ -404,12 +405,12 @@ export default function Profile() {
             <div className="space-y-4">
               <div>
                 <label htmlFor="diet" className="mb-2 block text-sm font-medium text-darkgreen">Diet Preference</label>
-                <select id="diet" aria-label="Diet preference" value={draft.preferences?.dietPreference || 'Vegetarian'} onChange={(event) => updateDraft({ preferences: { dietPreference: event.target.value } })} className="w-full rounded-2xl border border-[#dfe7d5] bg-white px-3 py-3 text-darkgreen focus:outline-none">
-                  <option value="Vegetarian">Vegetarian</option>
-                  <option value="Non-vegetarian">Non-vegetarian</option>
-                  <option value="Vegan">Vegan</option>
-                  <option value="Pescatarian">Pescatarian</option>
-                </select>
+                <DropdownSelect id="diet" ariaLabel="Diet preference" value={draft.preferences?.dietPreference || 'Vegetarian'} onChange={value => updateDraft({ preferences: { dietPreference: value } })} options={[
+                  { value: 'Vegetarian', label: 'Vegetarian' },
+                  { value: 'Non-vegetarian', label: 'Non-vegetarian' },
+                  { value: 'Vegan', label: 'Vegan' },
+                  { value: 'Pescatarian', label: 'Pescatarian' }
+                ]} />
               </div>
               <div>
                 <label htmlFor="calorie-goal" className="mb-2 block text-sm font-medium text-darkgreen">Daily Calorie Goal</label>
@@ -417,11 +418,11 @@ export default function Profile() {
               </div>
               <div>
                 <label htmlFor="activity-level" className="mb-2 block text-sm font-medium text-darkgreen">Activity Level</label>
-                <select id="activity-level" aria-label="Activity level" value={draft.preferences?.activityLevel || 'Moderate'} onChange={(event) => updateDraft({ preferences: { activityLevel: event.target.value } })} className="w-full rounded-2xl border border-[#dfe7d5] bg-white px-3 py-3 text-darkgreen focus:outline-none">
-                  <option value="Low">Low</option>
-                  <option value="Moderate">Moderate</option>
-                  <option value="High">High</option>
-                </select>
+                <DropdownSelect id="activity-level" ariaLabel="Activity level" value={draft.preferences?.activityLevel || 'Moderate'} onChange={value => updateDraft({ preferences: { activityLevel: value } })} options={[
+                  { value: 'Low', label: 'Low' },
+                  { value: 'Moderate', label: 'Moderate' },
+                  { value: 'High', label: 'High' }
+                ]} />
               </div>
               <div>
                 <label htmlFor="water-goal" className="mb-2 block text-sm font-medium text-darkgreen">Water Goal</label>

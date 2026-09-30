@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import BottomNavigation from '../components/BottomNavigation';
+import DropdownSelect from '../components/DropdownSelect';
 import * as apiClient from '../services/apiClient';
 import GoalCard from '../components/GoalCard';
 import GoalEditor from '../components/GoalEditor';
 
 export default function Goals() {
+  const navigate = useNavigate();
   const [goals, setGoals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(null);
@@ -63,8 +66,8 @@ export default function Goals() {
     }
   }
 
-  async function handleFruitPreference(event) {
-    const servings = Number(event.target.value);
+  async function handleFruitPreference(value) {
+    const servings = Number(value);
     setFruitPreference(servings);
     try {
       const saved = await apiClient.updateGoalPreferences({ fruitPreference: { servings } });
@@ -90,13 +93,21 @@ export default function Goals() {
     return goals.filter(g => g.daily && g.progress >= g.target).length;
   }
 
+  function handleBack() {
+    if (window.history.state?.idx > 0) {
+      navigate(-1);
+      return;
+    }
+    navigate('/home', { replace: true });
+  }
+
   if (loading) return <div className="min-h-screen bg-cream p-4">Loading goals...</div>;
   if (error && !profile) return <div className="min-h-screen bg-cream p-4"><p className="text-red-600">{error}</p></div>;
 
   return (
     <div className="min-h-screen bg-cream font-poppins text-darkgreen p-4 pb-32">
       <div className="flex items-start justify-between">
-        <button aria-label="Back" className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center">{'<'}</button>
+        <button type="button" aria-label="Back" onClick={handleBack} className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center">{'<'}</button>
         <div className="flex-1 mx-4">
           <h1 className="text-3xl font-bold">Your Goals</h1>
           <p className="text-sm text-gray-600 mt-1">Set your goals, stay consistent and become your healthiest self!</p>
@@ -127,12 +138,16 @@ export default function Goals() {
           </div>
           <button type="button" onClick={handleGenerate} className="rounded-lg bg-green-600 px-3 py-2 text-sm text-white">Refresh</button>
         </div>
-        <label className="mt-4 block text-sm text-gray-700">
+        <div className="mt-4 text-sm text-gray-700">
           Fruit variety preference
-          <select value={fruitPreference} onChange={handleFruitPreference} className="ml-2 rounded-lg border border-gray-200 bg-white px-2 py-1">
-            {[1, 2, 3, 4, 5].map(value => <option key={value} value={value}>{value} servings</option>)}
-          </select>
-        </label>
+          <DropdownSelect
+            id="fruit-preference"
+            ariaLabel="Fruit variety preference"
+            value={fruitPreference}
+            onChange={handleFruitPreference}
+            options={[1, 2, 3, 4, 5].map(value => ({ value, label: `${value} servings` }))}
+          />
+        </div>
         {plan ? (
           <div className="mt-4 grid gap-3 text-sm text-gray-700">
             {Object.entries(plan).filter(([key]) => key !== 'generatedAt' && key !== 'tips').map(([key, value]) => (
