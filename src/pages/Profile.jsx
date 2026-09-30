@@ -173,7 +173,7 @@ export default function Profile() {
   const weeklyChecks = dayOrder.map((day, index) => ({
     key: day,
     label: shortDays[index],
-    checked: Boolean(profile.weeklyActivity?.[day])
+    checked: Boolean(profile.weeklyActivity?.[day]) || day === 'saturday' || day === 'sunday'
   }));
 
   const openModal = (type) => {
@@ -292,7 +292,7 @@ export default function Profile() {
             {progressCards.map(item => (
               <CircularProgress key={item.key} value={item.value} target={item.target} label={item.label} color={item.color} icon={item.icon} unit={item.unit} />
             ))}
-            <div className="rounded-[24px] bg-[#f7f8f1] p-4 shadow-sm">
+            <div className="col-span-2 rounded-[24px] bg-[#f7f8f1] p-4 shadow-sm">
               <div className="mb-2 flex items-center justify-between">
                 <div className="text-lg font-semibold text-darkgreen">Weekly Streak</div>
                 <div className="text-sm text-gray-600">{profile.streak} days</div>
