@@ -8,9 +8,8 @@ export default function TipsCard() {
         <p className="font-semibold">Tips for best results</p>
         <p className="text-sm text-gray-600">Use natural light and try to avoid blurry images for accurate results.</p>
       </div>
-      <div className="w-20 h-20">
-        {/* small owl illustration placeholder */}
-        <img src="/owl-smile.png" alt="nutriowl" className="w-full h-full object-contain" />
+      <div className="w-20 h-20 overflow-hidden rounded-full bg-white p-1 shadow-sm">
+        <img src="/nutriowl_mascot_full.jpg" alt="NutriOwl mascot" className="w-full h-full object-cover rounded-full" />
       </div>
     </div>
   );

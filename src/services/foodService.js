@@ -6,11 +6,14 @@ export async function analyzeFood(image) {
   await new Promise(r => setTimeout(r, 1200));
 
   return {
+    isSample: true,
     food: 'Chicken Salad',
     calories: 420,
     protein: 32,
     carbs: 18,
     fat: 15,
+    sugar: 6,
+    sodium: 680,
     fiber: 8,
     vitamins: ['Vitamin A', 'Vitamin C', 'Vitamin K'],
     minerals: ['Iron', 'Calcium', 'Potassium'],

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { FiActivity, FiBell, FiCalendar, FiCheck, FiChevronRight, FiDroplet, FiHelpCircle, FiLogOut, FiSettings, FiShield, FiTarget, FiUser, FiZap } from 'react-icons/fi';
-import OwlAssistant from '../components/OwlAssistant';
+import { useNavigate } from 'react-router-dom';
 import BottomNavigation from '../components/BottomNavigation';
 import goalsService from '../services/goalsService';
 import profileService from '../services/profileService';
@@ -70,6 +70,7 @@ function ModalShell({ title, onClose, children, actions }) {
 }
 
 export default function Profile() {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState(() => profileService.loadProfile());
   const [modalType, setModalType] = useState(null);
   const [draft, setDraft] = useState(() => profileService.loadProfile());
@@ -163,7 +164,6 @@ export default function Profile() {
   ];
 
   const menuRows = [
-    { key: 'personal', label: 'Personal Information', icon: <FiUser className="text-lg" />, description: 'View your profile details' },
     { key: 'notifications', label: 'Notifications', icon: <FiBell className="text-lg" />, description: 'Manage reminders' },
     { key: 'privacy', label: 'Privacy & Security', icon: <FiShield className="text-lg" />, description: 'Local data and privacy' },
     { key: 'support', label: 'Help & Support', icon: <FiHelpCircle className="text-lg" />, description: 'Learn how NutriOwl works' },
@@ -209,10 +209,7 @@ export default function Profile() {
 
   const handleLogout = () => {
     setModalType(null);
-    profileService.updateProfile({
-      ...profile,
-      notifications: profile.notifications
-    });
+    navigate('/', { replace: true });
   };
 
   return (
@@ -227,8 +224,8 @@ export default function Profile() {
             <button aria-label="Open settings" onClick={() => openModal('settings')} className="absolute right-0 top-0 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-[#f3f7ee] text-xl text-green-700 shadow-sm">
               <FiSettings />
             </button>
-            <div className="h-24 w-24">
-              <OwlAssistant />
+            <div className="h-24 w-24 overflow-hidden rounded-full bg-[#edf5e7] p-1 shadow-[0_8px_16px_rgba(46,94,62,0.08)]">
+              <img src="/nutriowl_mascot_full.jpg" alt="NutriOwl mascot" className="h-full w-full rounded-full object-cover" />
             </div>
           </div>
         </div>
@@ -300,19 +297,19 @@ export default function Profile() {
                 <div className="text-lg font-semibold text-darkgreen">Weekly Streak</div>
                 <div className="text-sm text-gray-600">{profile.streak} days</div>
               </div>
-              <div className="mt-3 flex justify-between gap-1">
+              <div className="mt-3 flex justify-between gap-[2px] px-1">
                 {weeklyChecks.map((day) => (
-                  <div key={day.key} className="flex flex-col items-center gap-2">
-                    <span className="text-xs font-medium uppercase tracking-wide text-gray-600">{day.label}</span>
+                  <div key={day.key} className="flex min-w-0 flex-1 flex-col items-center gap-2">
+                    <span className="text-[10px] font-medium uppercase tracking-wide text-gray-600">{day.label}</span>
                     <span className={`flex h-7 w-7 items-center justify-center rounded-full ${day.checked ? 'bg-[#cfe1b7] text-[#294b2b]' : 'bg-[#ebf0e4] text-gray-400'}`}>
-                      {day.checked ? <FiCheck className="text-sm" /> : ''}
+                      {day.checked ? <FiCheck className="text-[12px]" /> : <span className="text-[10px] opacity-0">✓</span>}
                     </span>
                   </div>
                 ))}
               </div>
               <div className="mt-4 flex justify-center">
-                <div className="h-16 w-16 rounded-full bg-[#dfeccd] p-2">
-                  <OwlAssistant />
+                <div className="h-16 w-16 overflow-hidden rounded-full bg-[#dfeccd] p-1 shadow-sm">
+                  <img src="/nutriowl_mascot_full.jpg" alt="NutriOwl mascot" className="h-full w-full rounded-full object-cover" />
                 </div>
               </div>
             </div>

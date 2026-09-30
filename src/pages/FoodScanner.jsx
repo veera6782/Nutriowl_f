@@ -5,7 +5,6 @@ import UploadButton from '../components/UploadButton';
 import ScanButton from '../components/ScanButton';
 import TipsCard from '../components/TipsCard';
 import RecentScanCard from '../components/RecentScanCard';
-import OwlAssistant from '../components/OwlAssistant';
 import BottomNavigation from '../components/BottomNavigation';
 import { analyzeFood } from '../services/foodService';
 
@@ -13,6 +12,7 @@ export default function FoodScanner() {
   const [tab, setTab] = useState('camera');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const [scanError, setScanError] = useState('');
   const [uploadedImage, setUploadedImage] = useState(null);
   const [scans, setScans] = useState([]);
 
@@ -43,6 +43,7 @@ export default function FoodScanner() {
   async function handleCapture(imageBlob) {
     setLoading(true);
     setResult(null);
+    setScanError('');
     try {
       const res = await analyzeFood(imageBlob);
       setResult(res);
@@ -75,6 +76,7 @@ export default function FoodScanner() {
       }
     } catch (e) {
       console.error(e);
+      setScanError('We could not analyze this image. Please try another photo.');
     } finally {
       // keep loading a little to show animation
       setTimeout(() => setLoading(false), 800);
@@ -92,8 +94,8 @@ export default function FoodScanner() {
             <h1 className="text-3xl font-bold">Scan Food</h1>
             <p className="text-sm text-gray-600 mt-1">Scan your meal and discover its nutrition!</p>
           </div>
-          <div className="w-24 h-24">
-            <OwlAssistant />
+          <div className="w-24 h-24 overflow-hidden rounded-full bg-[#edf8ed] p-1 shadow-[0_8px_16px_rgba(46,94,62,0.08)]">
+            <img src="/nutriowl_mascot_full.jpg" alt="NutriOwl mascot" className="h-full w-full object-cover rounded-full" />
           </div>
         </div>
 
@@ -122,6 +124,77 @@ export default function FoodScanner() {
           </div>
         </div>
 
+        {scanError && (
+          <div role="alert" className="mt-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+            {scanError}
+          </div>
+        )}
+
+        {result && (
+          <section aria-labelledby="scan-results-title" className="mt-6 rounded-2xl bg-white p-5 shadow-sm">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h2 id="scan-results-title" className="text-xl font-bold text-darkgreen">{result.food || 'Nutrition details'}</h2>
+                <p className="mt-1 text-sm text-gray-600">Nutrition per scanned serving</p>
+              </div>
+              {result.healthScore != null && (
+                <div className="shrink-0 rounded-xl bg-green-50 px-3 py-2 text-center">
+                  <div className="text-lg font-bold text-green-800">{result.healthScore}</div>
+                  <div className="text-xs text-gray-600">Health score</div>
+                </div>
+              )}
+            </div>
+
+            {result.isSample && (
+              <p className="mt-3 rounded-xl bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900">
+                Demo estimate only. Image recognition is not connected, so these values may not match your food.
+              </p>
+            )}
+
+            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {[
+                ['Calories', result.calories, 'kcal'],
+                ['Protein', result.protein, 'g'],
+                ['Carbohydrates', result.carbs ?? result.carbohydrates, 'g'],
+                ['Fat', result.fat ?? result.fats, 'g'],
+                ['Sugar', result.sugar, 'g'],
+                ['Fiber', result.fiber, 'g'],
+                ['Sodium', result.sodium, 'mg']
+              ].map(([label, value, unit]) => (
+                <div key={label} className="rounded-xl bg-[#f6f8f2] px-3 py-3">
+                  <div className="text-xs text-gray-600">{label}</div>
+                  <div className="mt-1 font-semibold text-darkgreen">
+                    {value == null || value === '' ? 'Not available' : `${value} ${unit}`}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              {[
+                ['Vitamins', result.vitamins],
+                ['Minerals', result.minerals]
+              ].map(([title, items]) => (
+                <div key={title}>
+                  <h3 className="font-semibold text-darkgreen">{title}</h3>
+                  {Array.isArray(items) && items.length ? (
+                    <ul className="mt-2 flex flex-wrap gap-2">
+                      {items.map((item, index) => {
+                        const label = typeof item === 'string'
+                          ? item
+                          : `${item.name || item.label || title.slice(0, -1)}${item.amount != null || item.value != null ? `: ${item.amount ?? item.value} ${item.unit || ''}` : ''}`;
+                        return <li key={`${label}-${index}`} className="rounded-full bg-green-50 px-3 py-1 text-sm text-green-900">{label}</li>;
+                      })}
+                    </ul>
+                  ) : (
+                    <p className="mt-1 text-sm text-gray-500">Not available</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         <div className="mt-6">
           <TipsCard />
         </div>
@@ -146,8 +219,8 @@ export default function FoodScanner() {
       <AnimatePresence>{loading && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/40 flex items-center justify-center z-40">
           <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-white rounded-xl p-6 w-80 flex flex-col items-center gap-4">
-            <div className="w-32 h-32">
-              <OwlAssistant flying />
+            <div className="w-32 h-32 overflow-hidden rounded-full bg-[#edf8ed] p-2 shadow-[0_8px_16px_rgba(46,94,62,0.08)]">
+              <img src="/nutriowl_mascot_full.jpg" alt="NutriOwl mascot" className="h-full w-full object-cover rounded-full" />
             </div>
             <div className="text-center">
               <p className="font-semibold">Analyzing your meal...</p>

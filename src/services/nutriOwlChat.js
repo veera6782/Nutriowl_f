@@ -1,4 +1,4 @@
-const KEYWORDS = {
+      const KEYWORDS = {
   protein: ['protein', 'high protein', 'proteins', 'protein foods', 'protein-rich'],
   snacks: ['snack', 'snacks', 'healthy snacks'],
   fruits: ['fruit', 'fruits'],

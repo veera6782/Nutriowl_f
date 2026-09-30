@@ -103,14 +103,16 @@ export default function Chat() {
             <h1 className="text-3xl font-bold text-green-800">NutriOwl Chat</h1>
             <p className="text-gray-600">Your friendly nutrition buddy is here to help!</p>
           </div>
-          <div className="w-28 h-28">
-            <img src="/owl.png" alt="NutriOwl" className="w-full h-full object-contain" />
+          <div className="w-28 h-28 overflow-hidden rounded-full bg-[#edf8ed] p-1 shadow-[0_8px_16px_rgba(46,94,62,0.08)]">
+            <img src="/nutriowl_mascot_full.jpg" alt="NutriOwl mascot" className="w-full h-full object-cover rounded-full" />
           </div>
         </header>
 
         <section className="bg-green-50 rounded-2xl p-4 shadow-inner mb-4">
           <div className="flex items-start gap-4">
-            <img src="/owl-smile.png" alt="NutriOwl" className="w-12 h-12 rounded-full object-cover" />
+            <div className="h-12 w-12 overflow-hidden rounded-full bg-white p-1 shadow-sm">
+              <img src="/nutriowl_mascot_full.jpg" alt="NutriOwl mascot" className="h-full w-full rounded-full object-cover" />
+            </div>
             <div>
               <div className="font-semibold text-green-800">Hi there! 👋</div>
               <div className="text-gray-600">Ask me anything about nutrition, healthy eating or your diet!</div>
@@ -124,7 +126,7 @@ export default function Chat() {
           ))}
         </div>
 
-        <div className="fixed bottom-24 left-1/2 w-[calc(100%-3rem)] max-w-[372px] -translate-x-1/2 bg-transparent">
+        <div className="sticky bottom-0 z-20 mt-3 bg-[#f7f9f4]/90 pt-3 backdrop-blur-sm">
           <ChatInput onSend={sendMessage} disabled={loading} />
         </div>
 

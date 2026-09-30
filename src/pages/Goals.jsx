@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import OwlAssistant from '../components/OwlAssistant';
 import BottomNavigation from '../components/BottomNavigation';
 import * as apiClient from '../services/apiClient';
 import GoalCard from '../components/GoalCard';
@@ -102,8 +101,8 @@ export default function Goals() {
           <h1 className="text-3xl font-bold">Your Goals</h1>
           <p className="text-sm text-gray-600 mt-1">Set your goals, stay consistent and become your healthiest self!</p>
         </div>
-        <div className="w-24 h-24">
-          <OwlAssistant />
+        <div className="w-24 h-24 overflow-hidden rounded-full bg-[#edf8ed] p-1 shadow-[0_8px_16px_rgba(46,94,62,0.08)]">
+          <img src="/nutriowl_mascot_full.jpg" alt="NutriOwl mascot" className="h-full w-full object-cover rounded-full" />
         </div>
       </div>
 
@@ -124,7 +123,7 @@ export default function Goals() {
         <div className="flex items-center justify-between gap-3">
           <div>
             <h3 className="font-semibold text-lg">Your wellness plan</h3>
-            <p className="text-xs text-gray-600 mt-1">Personalized for {profile?.name || 'you'}</p>
+            <p className="text-xs text-gray-600 mt-1">Personalized for {profile?.name?.trim() || 'you'}</p>
           </div>
           <button type="button" onClick={handleGenerate} className="rounded-lg bg-green-600 px-3 py-2 text-sm text-white">Refresh</button>
         </div>

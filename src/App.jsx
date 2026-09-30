@@ -7,9 +7,10 @@ import Chat from './pages/Chat';
 import Profile from './pages/Profile';
 import History from './pages/History';
 import Onboarding from './pages/Onboarding';
+import AuthLanding from './pages/AuthLanding';
 
 function StartupGate() {
-  return <Onboarding />;
+  return <AuthLanding />;
 }
 
 export default function App() {

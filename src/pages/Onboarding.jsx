@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import OwlAssistant from '../components/OwlAssistant';
 import profileService from '../services/profileService';
 import * as apiClient from '../services/apiClient';
 
@@ -128,8 +127,8 @@ export default function Onboarding() {
                 A few details will help NutriOwl <br /> personalize your experience.
               </p>
             </div>
-            <div className="w-[180px] shrink-0">
-              <OwlAssistant />
+            <div className="w-[180px] shrink-0 overflow-hidden rounded-full bg-[#f4f9f2] p-1 shadow-[0_8px_20px_rgba(46,94,62,0.08)]">
+              <img src="/nutriowl_mascot_full.jpg" alt="NutriOwl mascot" className="h-full w-full object-contain" />
             </div>
           </div>
         </div>
