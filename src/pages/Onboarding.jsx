@@ -57,6 +57,7 @@ function validate(form) {
 export default function Onboarding() {
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [saving, setSaving] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const navigate = useNavigate();
@@ -70,6 +71,7 @@ export default function Onboarding() {
   }
 
   function handleBlur() {
+    if (!hasAttemptedSubmit) return;
     setErrors(validate(form));
   }
 
@@ -82,6 +84,7 @@ export default function Onboarding() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setHasAttemptedSubmit(true);
     const nextErrors = validate(form);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
@@ -108,15 +111,6 @@ export default function Onboarding() {
   return (
     <div className="min-h-screen bg-cream font-poppins text-darkgreen">
       <div className="mx-auto max-w-[420px] px-4 pb-8 pt-3">
-        <div className="flex items-center justify-between px-1 pt-1 text-[15px] font-semibold text-darkgreen">
-          <span>9:41</span>
-          <div className="flex items-center gap-2 text-lg">
-            <span>◔</span>
-            <span>▣</span>
-            <span>◍</span>
-          </div>
-        </div>
-
         <div className="relative mt-4">
           <div className="absolute right-1 top-2 h-14 w-14 rounded-full bg-green-100/60 blur-sm" />
           <div className="absolute right-10 top-10 h-10 w-10 rounded-full bg-green-100/60 blur-sm" />

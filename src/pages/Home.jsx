@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FiCamera, FiMessageCircle, FiTarget, FiUser } from 'react-icons/fi';
 import BottomNavigation from '../components/BottomNavigation';
 import GoalCard from '../components/GoalCard';
 import RecentScanCard from '../components/RecentScanCard';
@@ -87,22 +88,22 @@ export default function Home() {
 
       <div className="mt-4 grid grid-cols-4 gap-3">
         <button onClick={handleScanClick} className="bg-white rounded-xl p-3 flex flex-col items-center text-sm shadow-sm">
-          <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center">🍏</div>
+          <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center text-green-700"><FiCamera size={22} aria-hidden="true" /></div>
           <div className="mt-2">Scan Food</div>
           <div className="text-xs text-gray-500">Check nutrition</div>
         </button>
         <button onClick={() => navigate('/goals')} className="bg-white rounded-xl p-3 flex flex-col items-center text-sm shadow-sm">
-          <div className="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center">🎯</div>
+          <div className="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center text-orange-600"><FiTarget size={22} aria-hidden="true" /></div>
           <div className="mt-2">Goals</div>
           <div className="text-xs text-gray-500">Track progress</div>
         </button>
         <button onClick={() => navigate('/chat')} className="bg-white rounded-xl p-3 flex flex-col items-center text-sm shadow-sm">
-          <div className="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center">💬</div>
+          <div className="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center text-purple-700"><FiMessageCircle size={22} aria-hidden="true" /></div>
           <div className="mt-2">Chat</div>
           <div className="text-xs text-gray-500">Ask NutriOwl</div>
         </button>
         <button onClick={() => navigate('/profile')} className="bg-white rounded-xl p-3 flex flex-col items-center text-sm shadow-sm">
-          <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center">👤</div>
+          <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center text-green-700"><FiUser size={22} aria-hidden="true" /></div>
           <div className="mt-2">Profile</div>
           <div className="text-xs text-gray-500">View & edit</div>
         </button>

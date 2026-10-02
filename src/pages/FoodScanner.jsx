@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FiCamera, FiImage } from 'react-icons/fi';
 import CameraPreview from '../components/CameraPreview';
 import UploadButton from '../components/UploadButton';
 import ScanButton from '../components/ScanButton';
@@ -102,10 +103,10 @@ export default function FoodScanner() {
         <div className="mt-6 bg-white rounded-2xl shadow-sm p-2">
           <div className="flex items-center gap-4">
             <button onClick={() => setTab('camera')} className={`flex-1 py-3 rounded-lg ${tab === 'camera' ? 'bg-green-100 text-darkgreen' : 'text-gray-600'}`}>
-              <span className="inline-flex items-center gap-2 justify-center"><span className="bg-green-500 text-white p-1 rounded-full">📷</span> Camera</span>
+              <span className="inline-flex items-center gap-2 justify-center"><span className="bg-green-500 text-white p-1 rounded-full"><FiCamera size={16} aria-hidden="true" /></span> Camera</span>
             </button>
             <button onClick={() => setTab('upload')} className={`flex-1 py-3 rounded-lg ${tab === 'upload' ? 'bg-green-100 text-darkgreen' : 'text-gray-600'}`}>
-              <span className="inline-flex items-center gap-2 justify-center"><span className="bg-transparent text-darkgreen p-1 rounded-full">🖼️</span> Upload Photo</span>
+              <span className="inline-flex items-center gap-2 justify-center"><span className="bg-transparent text-darkgreen p-1 rounded-full"><FiImage size={18} aria-hidden="true" /></span> Upload Photo</span>
             </button>
           </div>
 

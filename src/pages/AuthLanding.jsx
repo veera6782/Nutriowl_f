@@ -7,17 +7,8 @@ export default function AuthLanding() {
   const goToOnboarding = () => navigate('/onboarding');
 
   return (
-    <div className="min-h-screen bg-cream font-poppins text-darkgreen">
-      <div className="mx-auto max-w-[420px] px-4 pb-8 pt-3">
-        <div className="flex items-center justify-between px-1 pt-1 text-[15px] font-semibold text-darkgreen">
-          <span>9:41</span>
-          <div className="flex items-center gap-2 text-lg">
-            <span>◔</span>
-            <span>▣</span>
-            <span>◍</span>
-          </div>
-        </div>
-
+    <div className="flex min-h-screen flex-col bg-cream font-poppins text-darkgreen">
+      <div className="my-auto mx-auto w-full max-w-[420px] px-4 py-8">
         <div className="relative mt-6 overflow-hidden rounded-[28px] bg-gradient-to-br from-[#edf7ea] via-white to-[#e9f5e8] px-5 pb-5 pt-6 shadow-[0_12px_30px_rgba(46,94,62,0.10)] ring-1 ring-[#dbe9d9]">
           <div className="absolute -left-6 top-10 h-20 w-20 rounded-full bg-[#dff2de] blur-xl" />
           <div className="absolute right-0 top-0 h-24 w-24 rounded-full bg-[#e5f5de] blur-xl" />

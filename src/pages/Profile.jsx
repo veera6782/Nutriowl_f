@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { FiActivity, FiBell, FiCalendar, FiCheck, FiChevronRight, FiDroplet, FiHelpCircle, FiLogOut, FiSettings, FiShield, FiTarget, FiUser, FiZap } from 'react-icons/fi';
+import { FiActivity, FiBell, FiCamera, FiCalendar, FiCheck, FiChevronRight, FiDroplet, FiHelpCircle, FiLogOut, FiSettings, FiShield, FiStar, FiTarget, FiUser, FiZap } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import BottomNavigation from '../components/BottomNavigation';
 import DropdownSelect from '../components/DropdownSelect';
@@ -251,28 +251,28 @@ export default function Profile() {
           <div className="grid grid-cols-4 gap-3">
             <div className="rounded-2xl bg-[#f8faf5] p-3 text-center shadow-sm">
               <div className="flex items-center justify-center gap-2 text-[#ff9c2a]">
-                <span aria-hidden="true">🔥</span>
+                <FiZap aria-hidden="true" />
               </div>
               <div className="mt-2 text-2xl font-bold text-darkgreen">{profile.streak}</div>
               <div className="text-xs text-gray-600">Day Streak</div>
             </div>
             <div className="rounded-2xl bg-[#f8faf5] p-3 text-center shadow-sm">
               <div className="flex items-center justify-center gap-2 text-[#f3b312]">
-                <span aria-hidden="true">⭐</span>
+                <FiStar aria-hidden="true" />
               </div>
               <div className="mt-2 text-2xl font-bold text-darkgreen">{profile.points}</div>
               <div className="text-xs text-gray-600">Nutri Points</div>
             </div>
             <div className="rounded-2xl bg-[#f8faf5] p-3 text-center shadow-sm">
               <div className="flex items-center justify-center gap-2 text-[#4CAF50]">
-                <span aria-hidden="true">🎯</span>
+                <FiTarget aria-hidden="true" />
               </div>
               <div className="mt-2 text-2xl font-bold text-darkgreen">{profile.goalsSet}</div>
               <div className="text-xs text-gray-600">Goals Set</div>
             </div>
             <div className="rounded-2xl bg-[#f8faf5] p-3 text-center shadow-sm">
               <div className="flex items-center justify-center gap-2 text-[#4CAF50]">
-                <span aria-hidden="true">📷</span>
+                <FiCamera aria-hidden="true" />
               </div>
               <div className="mt-2 text-2xl font-bold text-darkgreen">{profile.mealsScanned}</div>
               <div className="text-xs text-gray-600">Meals Scanned</div>

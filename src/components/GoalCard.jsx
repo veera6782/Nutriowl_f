@@ -1,16 +1,27 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { FiActivity, FiCamera, FiDroplet, FiHeart, FiSun, FiTarget, FiZap } from 'react-icons/fi';
+
+const goalIcons = {
+  scan: FiCamera,
+  protein: FiZap,
+  fruits: FiSun,
+  water: FiDroplet,
+  active: FiActivity,
+  healthyMeals: FiHeart
+};
 
 export default function GoalCard({ goal, onIncrement, onEdit }) {
   const completed = typeof goal.target === 'number' && goal.progress >= goal.target;
   const progressPct = goal.target ? Math.round((goal.progress / goal.target) * 100) : 0;
+  const Icon = goalIcons[goal.id] || FiTarget;
 
   return (
     <div className="bg-white rounded-2xl shadow-sm p-4 mb-4">
       <div className="flex items-center justify-between">
         <div className="flex items-start gap-3">
-          <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center">{ /* placeholder icon area */ }
-            <div className="text-2xl">{goal.icon || '🍎'}</div>
+          <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center text-green-700">
+            <Icon size={23} strokeWidth={1.9} aria-hidden="true" />
           </div>
           <div>
             <div className="font-semibold text-lg text-darkgreen">{goal.title}</div>
