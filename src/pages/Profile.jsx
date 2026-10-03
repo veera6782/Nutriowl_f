@@ -383,15 +383,6 @@ export default function Profile() {
                 <label htmlFor="profile-name" className="mb-2 block text-sm font-medium text-darkgreen">Name</label>
                 <input id="profile-name" aria-label="Name" value={draft.name || ''} onChange={(event) => updateDraft({ name: event.target.value })} className="w-full rounded-2xl border border-[#dfe7d5] bg-white px-3 py-3 text-darkgreen focus:outline-none" />
               </div>
-              <div>
-                <label htmlFor="diet-preference" className="mb-2 block text-sm font-medium text-darkgreen">Diet Preference</label>
-                <DropdownSelect id="diet-preference" ariaLabel="Diet Preference" value={draft.preferences?.dietPreference || 'Vegetarian'} onChange={value => updateDraft({ preferences: { dietPreference: value } })} options={[
-                  { value: 'Vegetarian', label: 'Vegetarian' },
-                  { value: 'Non-vegetarian', label: 'Non-vegetarian' },
-                  { value: 'Vegan', label: 'Vegan' },
-                  { value: 'Pescatarian', label: 'Pescatarian' }
-                ]} />
-              </div>
             </div>
           )}
 
