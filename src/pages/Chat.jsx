@@ -114,7 +114,7 @@ export default function Chat() {
               <img src="/nutriowl_mascot_full.jpg" alt="NutriOwl mascot" className="h-full w-full rounded-full object-cover" />
             </div>
             <div>
-              <div className="font-semibold text-green-800">Hi there! 👋</div>
+              <div className="font-semibold text-green-800">Hi there!</div>
               <div className="text-gray-600">Ask me anything about nutrition, healthy eating or your diet!</div>
             </div>
           </div>

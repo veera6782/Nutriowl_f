@@ -52,7 +52,7 @@ export default function Home() {
     <div className="min-h-screen bg-cream font-poppins text-darkgreen p-4 pb-32">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Hello, {displayName}! 👋</h1>
+          <h1 className="text-3xl font-bold">Hello, {displayName}!</h1>
           <p className="text-sm text-gray-600 mt-1">Let’s make today a <span className="text-green-600">healthy</span> day!</p>
         </div>
         <div className="w-28 h-28">

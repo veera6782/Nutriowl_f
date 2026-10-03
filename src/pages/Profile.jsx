@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { FiActivity, FiBell, FiCamera, FiCalendar, FiCheck, FiChevronRight, FiDroplet, FiHelpCircle, FiLogOut, FiSettings, FiShield, FiStar, FiTarget, FiUser, FiZap } from 'react-icons/fi';
+import { FiActivity, FiBell, FiCamera, FiCalendar, FiCheck, FiChevronRight, FiDroplet, FiHelpCircle, FiLogOut, FiPieChart, FiSettings, FiShield, FiStar, FiTarget, FiUser, FiZap } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import BottomNavigation from '../components/BottomNavigation';
 import DropdownSelect from '../components/DropdownSelect';
@@ -100,7 +100,7 @@ export default function Profile() {
       label: 'Calories',
       value: Number(profile.progress?.calories?.current ?? 0),
       target: Number(profile.progress?.calories?.target ?? 1600),
-      icon: '🔥',
+      icon: <FiZap className="text-amber-500" aria-hidden="true" />,
       unit: 'kcal',
       color: '#f59e0b'
     },
@@ -109,7 +109,7 @@ export default function Profile() {
       label: 'Protein',
       value: Number(profile.progress?.protein?.current ?? 0),
       target: Number(profile.progress?.protein?.target ?? 80),
-      icon: '🏋️',
+      icon: <FiActivity className="text-green-600" aria-hidden="true" />,
       unit: 'g',
       color: '#4CAF50'
     },
@@ -118,7 +118,7 @@ export default function Profile() {
       label: 'Carbs',
       value: Number(profile.progress?.carbs?.current ?? 0),
       target: Number(profile.progress?.carbs?.target ?? 300),
-      icon: '🌾',
+      icon: <FiPieChart className="text-amber-500" aria-hidden="true" />,
       unit: 'g',
       color: '#f59e0b'
     },
@@ -127,7 +127,7 @@ export default function Profile() {
       label: 'Water',
       value: Number(profile.progress?.water?.current ?? 0),
       target: Number(profile.progress?.water?.target ?? 8),
-      icon: '💧',
+      icon: <FiDroplet className="text-sky-500" aria-hidden="true" />,
       unit: 'L',
       color: '#4CAF50'
     }
@@ -144,7 +144,7 @@ export default function Profile() {
     {
       key: 'dailyCalorieGoal',
       label: 'Daily Calorie Goal',
-      value: `${profile.preferences?.dailyCalorieGoal || 1600} kcal`,
+      value: `${profile.preferences?.dailyCalorieGoal ?? 1600} kcal`,
       icon: <FiZap className="text-xl text-yellow-500" />,
       valueClass: 'text-base font-medium'
     },
@@ -158,7 +158,7 @@ export default function Profile() {
     {
       key: 'waterGoal',
       label: 'Water Goal',
-      value: `${profile.preferences?.waterGoal || 8} glasses`,
+      value: `${profile.preferences?.waterGoal ?? 8} glasses`,
       icon: <FiDroplet className="text-xl text-sky-500" />,
       valueClass: 'text-base font-medium'
     }
@@ -408,7 +408,7 @@ export default function Profile() {
               </div>
               <div>
                 <label htmlFor="calorie-goal" className="mb-2 block text-sm font-medium text-darkgreen">Daily Calorie Goal</label>
-                <input id="calorie-goal" aria-label="Daily calorie goal" type="number" value={draft.preferences?.dailyCalorieGoal || 1600} onChange={(event) => updateDraft({ preferences: { dailyCalorieGoal: Number(event.target.value) || 0 } })} className="w-full rounded-2xl border border-[#dfe7d5] bg-white px-3 py-3 text-darkgreen focus:outline-none" />
+                <input id="calorie-goal" aria-label="Daily calorie goal" type="number" value={draft.preferences?.dailyCalorieGoal ?? ''} onChange={(event) => updateDraft({ preferences: { dailyCalorieGoal: event.target.value } })} className="w-full rounded-2xl border border-[#dfe7d5] bg-white px-3 py-3 text-darkgreen focus:outline-none" />
               </div>
               <div>
                 <label htmlFor="activity-level" className="mb-2 block text-sm font-medium text-darkgreen">Activity Level</label>
@@ -420,7 +420,7 @@ export default function Profile() {
               </div>
               <div>
                 <label htmlFor="water-goal" className="mb-2 block text-sm font-medium text-darkgreen">Water Goal</label>
-                <input id="water-goal" aria-label="Water goal" type="number" min="1" value={draft.preferences?.waterGoal || 8} onChange={(event) => updateDraft({ preferences: { waterGoal: Number(event.target.value) || 0 } })} className="w-full rounded-2xl border border-[#dfe7d5] bg-white px-3 py-3 text-darkgreen focus:outline-none" />
+                <input id="water-goal" aria-label="Water goal" type="number" min="1" value={draft.preferences?.waterGoal ?? ''} onChange={(event) => updateDraft({ preferences: { waterGoal: event.target.value } })} className="w-full rounded-2xl border border-[#dfe7d5] bg-white px-3 py-3 text-darkgreen focus:outline-none" />
               </div>
             </div>
           )}

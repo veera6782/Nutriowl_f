@@ -132,14 +132,14 @@ export default function Onboarding() {
           <div className="relative flex items-start justify-between gap-3">
             <div className="flex-1 pt-2">
               <h1 className="text-[3rem] font-bold leading-[0.98] tracking-[-0.05em]">Let’s get to <br /> know you!</h1>
-              <p className="mt-3 text-[16px] leading-6 text-gray-600">
-                A few details will help NutriOwl <br /> personalize your experience.
-              </p>
             </div>
             <div className="w-[180px] shrink-0 overflow-hidden rounded-full bg-[#f4f9f2] p-1 shadow-[0_8px_20px_rgba(46,94,62,0.08)]">
               <img src="/nutriowl_mascot_full.jpg" alt="NutriOwl mascot" className="h-full w-full object-contain" />
             </div>
           </div>
+          <p className="relative mt-3 w-full text-[16px] leading-6 text-gray-600">
+            A few details will help NutriOwl personalize your experience.
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
