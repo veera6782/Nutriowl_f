@@ -239,8 +239,6 @@ export default function Profile() {
               </div>
               <div>
                 <div className="text-2xl font-bold text-darkgreen">{profile.name}</div>
-                <div className="text-base text-gray-700">{profile.level}</div>
-                <div className="mt-2 inline-flex rounded-full bg-[#edf5e6] px-3 py-1 text-sm font-medium text-darkgreen">Level {profile.level.includes('Explorer') ? '4' : '1'}</div>
               </div>
             </div>
             <div className="text-3xl text-darkgreen"><FiChevronRight /></div>
@@ -384,10 +382,6 @@ export default function Profile() {
               <div>
                 <label htmlFor="profile-name" className="mb-2 block text-sm font-medium text-darkgreen">Name</label>
                 <input id="profile-name" aria-label="Name" value={draft.name || ''} onChange={(event) => updateDraft({ name: event.target.value })} className="w-full rounded-2xl border border-[#dfe7d5] bg-white px-3 py-3 text-darkgreen focus:outline-none" />
-              </div>
-              <div>
-                <label htmlFor="profile-level" className="mb-2 block text-sm font-medium text-darkgreen">Level</label>
-                <input id="profile-level" aria-label="Level" value={draft.level || ''} onChange={(event) => updateDraft({ level: event.target.value })} className="w-full rounded-2xl border border-[#dfe7d5] bg-white px-3 py-3 text-darkgreen focus:outline-none" />
               </div>
               <div>
                 <label htmlFor="diet-preference" className="mb-2 block text-sm font-medium text-darkgreen">Diet Preference</label>

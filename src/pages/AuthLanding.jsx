@@ -25,10 +25,11 @@ export default function AuthLanding() {
             </div>
           </div>
 
-          <p className="relative mt-4 text-[15px] leading-6 text-gray-600">
-            Sign in or create an account to personalize your nutrition journey and keep your goals on track.
-          </p>
         </div>
+
+        <p className="mt-4 px-1 text-[15px] leading-6 text-gray-600">
+          Sign in or create an account to personalize your nutrition journey and keep your goals on track.
+        </p>
 
         <div className="mt-7 space-y-3">
           <button
@@ -48,9 +49,9 @@ export default function AuthLanding() {
           </button>
         </div>
 
-        <div className="mt-6 rounded-[18px] bg-white/70 px-4 py-3 text-center text-[13px] text-gray-600 ring-1 ring-[#e2ebdf]">
+        <p className="mt-6 px-1 text-[13px] leading-5 text-gray-600">
           By continuing, you agree to NutriOwl&apos;s healthy habits and personalized guidance.
-        </div>
+        </p>
       </div>
     </div>
   );

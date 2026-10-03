@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FiActivity, FiArrowRight, FiBarChart2, FiCalendar, FiHeart, FiLock, FiMail, FiMaximize2, FiSun, FiTrendingUp, FiUser, FiZap } from 'react-icons/fi';
 import profileService from '../services/profileService';
 import * as apiClient from '../services/apiClient';
 
@@ -27,6 +28,20 @@ const goalOptions = [
   { key: 'performance', title: 'Improve Sports Performance', desc: 'Fuel your activities and recovery' },
   { key: 'habits', title: 'Build Healthy Habits', desc: 'Create a balanced routine' }
 ];
+
+const activityIcons = {
+  low: FiActivity,
+  moderate: FiTrendingUp,
+  high: FiZap
+};
+
+const goalIcons = {
+  balanced: FiSun,
+  strength: FiActivity,
+  energy: FiZap,
+  performance: FiTrendingUp,
+  habits: FiHeart
+};
 
 function isValidEmail(val) {
   return /\S+@\S+\.\S+/.test(val || '');
@@ -130,7 +145,9 @@ export default function Onboarding() {
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div className="rounded-[20px] bg-white px-4 py-3 shadow-[0_6px_18px_rgba(46,94,62,0.08)] ring-1 ring-black/5">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-lg shadow-inner">👤</div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-700 shadow-inner">
+                <FiUser size={20} aria-hidden="true" />
+              </div>
               <div className="flex-1">
                 <label className="block text-[14px] font-semibold text-darkgreen">1. What’s your name?</label>
                 <input
@@ -148,7 +165,9 @@ export default function Onboarding() {
 
           <div className="rounded-[20px] bg-white px-4 py-3 shadow-[0_6px_18px_rgba(46,94,62,0.08)] ring-1 ring-black/5">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-lg shadow-inner">✉️</div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-700 shadow-inner">
+                <FiMail size={20} aria-hidden="true" />
+              </div>
               <div className="flex-1">
                 <label className="block text-[14px] font-semibold text-darkgreen">2. What’s your Gmail ID / Email?</label>
                 <input
@@ -167,8 +186,10 @@ export default function Onboarding() {
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-[20px] bg-white px-4 py-3 shadow-[0_6px_18px_rgba(46,94,62,0.08)] ring-1 ring-black/5">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-lg shadow-inner">🗓️</div>
-                <div className="flex-1">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-700 shadow-inner">
+                  <FiCalendar size={20} aria-hidden="true" />
+                </div>
+                <div className="min-w-0 flex-1">
                   <label className="block text-[14px] font-semibold text-darkgreen">3. How old are you?</label>
                   <div className="mt-2 flex items-center gap-2">
                     <input
@@ -177,8 +198,8 @@ export default function Onboarding() {
                       value={form.age}
                       onChange={(e) => handleField('age', e.target.value.replace(/[^0-9]/g, ''))}
                       onBlur={handleBlur}
-                      placeholder="Enter your age"
-                      className="w-full border-0 bg-transparent p-0 text-[16px] text-darkgreen placeholder:text-gray-400 focus:outline-none"
+                      placeholder="e.g. 25"
+                      className="w-full min-w-0 border-0 bg-transparent p-0 text-[12px] text-darkgreen placeholder:text-gray-400 focus:outline-none"
                     />
                     <span className="text-[12px] text-gray-500">years</span>
                   </div>
@@ -189,8 +210,10 @@ export default function Onboarding() {
 
             <div className="rounded-[20px] bg-white px-4 py-3 shadow-[0_6px_18px_rgba(46,94,62,0.08)] ring-1 ring-black/5">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-lg shadow-inner">📏</div>
-                <div className="flex-1">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-700 shadow-inner">
+                  <FiMaximize2 size={20} aria-hidden="true" />
+                </div>
+                <div className="min-w-0 flex-1">
                   <label className="block text-[14px] font-semibold text-darkgreen">4. What’s your height?</label>
                   <div className="mt-2 flex items-center gap-2">
                     <input
@@ -199,8 +222,8 @@ export default function Onboarding() {
                       value={form.height}
                       onChange={(e) => handleField('height', e.target.value.replace(/[^0-9.]/g, ''))}
                       onBlur={handleBlur}
-                      placeholder="Enter your height"
-                      className="w-full border-0 bg-transparent p-0 text-[16px] text-darkgreen placeholder:text-gray-400 focus:outline-none"
+                      placeholder="e.g. 170"
+                      className="w-full min-w-0 border-0 bg-transparent p-0 text-[12px] text-darkgreen placeholder:text-gray-400 focus:outline-none"
                     />
                     <span className="text-[12px] text-gray-500">cm</span>
                   </div>
@@ -212,7 +235,9 @@ export default function Onboarding() {
 
           <div className="rounded-[20px] bg-white px-4 py-3 shadow-[0_6px_18px_rgba(46,94,62,0.08)] ring-1 ring-black/5">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-lg shadow-inner">⚖️</div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-700 shadow-inner">
+                <FiBarChart2 size={20} aria-hidden="true" />
+              </div>
               <div className="flex-1">
                 <label className="block text-[14px] font-semibold text-darkgreen">5. What’s your weight?</label>
                 <div className="mt-2 flex items-center gap-2">
@@ -237,6 +262,7 @@ export default function Onboarding() {
             <div className="grid grid-cols-3 gap-3">
               {activityOptions.map((option) => {
                 const selected = form.activityLevel === option.key;
+                const ActivityIcon = activityIcons[option.key];
                 return (
                   <button
                     key={option.key}
@@ -245,7 +271,7 @@ export default function Onboarding() {
                     className={`rounded-[18px] border bg-white px-3 py-4 text-left shadow-[0_6px_18px_rgba(46,94,62,0.08)] transition ${selected ? 'border-green-300 bg-green-50' : 'border-[#dfe8da]'}`}
                   >
                     <div className="mb-3 flex h-16 items-center justify-center">
-                      <span className="text-4xl">{option.key === 'low' ? '🐣' : option.key === 'moderate' ? '🦉' : '🏋️'}</span>
+                      <ActivityIcon className="text-green-700" size={36} aria-hidden="true" />
                     </div>
                     <div className="text-center text-[14px] font-semibold text-darkgreen">{option.title}</div>
                     <div className="mt-2 text-center text-[11px] leading-4 text-gray-600">{option.desc}</div>
@@ -261,8 +287,9 @@ export default function Onboarding() {
               7. What’s your goal? <span className="font-normal text-gray-500">(Select all that apply)</span>
             </label>
             <div className="grid grid-cols-3 gap-3">
-              {goalOptions.map((option, index) => {
+              {goalOptions.map((option) => {
                 const selected = form.goals.includes(option.key);
+                const GoalIcon = goalIcons[option.key];
                 return (
                   <button
                     key={option.key}
@@ -271,7 +298,7 @@ export default function Onboarding() {
                     className={`rounded-[18px] border bg-white px-3 py-4 text-left shadow-[0_6px_18px_rgba(46,94,62,0.08)] transition ${selected ? 'border-green-300 bg-green-50' : 'border-[#dfe8da]'}`}
                   >
                     <div className="mb-3 flex h-16 items-center justify-between">
-                      <span className="text-3xl">{['🥗', '💪', '⚡', '🏆', '🌱'][index]}</span>
+                      <GoalIcon className="text-green-700" size={30} aria-hidden="true" />
                       <span className={`flex h-6 w-6 items-center justify-center rounded-md border text-sm ${selected ? 'border-green-600 bg-green-600 text-white' : 'border-gray-300 text-transparent'}`}>
                         ✓
                       </span>
@@ -291,13 +318,13 @@ export default function Onboarding() {
             className="mt-4 flex w-full items-center justify-center rounded-full bg-green-600 px-6 py-4 text-center text-[26px] font-bold text-white shadow-[0_10px_20px_rgba(76,175,80,0.25)] transition hover:bg-green-700 disabled:cursor-wait disabled:opacity-60"
           >
             <span>{saving ? 'Saving...' : 'Continue'}</span>
-            <span className="ml-3 text-2xl">→</span>
+            <FiArrowRight className="ml-3" size={24} aria-hidden="true" />
           </button>
           {submitError && <p className="mt-2 text-center text-sm text-red-600">{submitError}</p>}
         </form>
 
         <div className="mt-4 flex items-center justify-center gap-2 pb-4 text-[12px] text-gray-500">
-          <span>🔒</span>
+          <FiLock size={14} aria-hidden="true" />
           <span>Your information is safe with NutriOwl</span>
         </div>
       </div>

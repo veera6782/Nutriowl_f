@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNavigation from '../components/BottomNavigation';
-import DropdownSelect from '../components/DropdownSelect';
 import * as apiClient from '../services/apiClient';
 import GoalCard from '../components/GoalCard';
 import GoalEditor from '../components/GoalEditor';
@@ -13,8 +12,6 @@ export default function Goals() {
   const [editing, setEditing] = useState(null);
   const [message, setMessage] = useState('');
   const [profile, setProfile] = useState(null);
-  const [plan, setPlan] = useState(null);
-  const [fruitPreference, setFruitPreference] = useState(2);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -23,8 +20,6 @@ export default function Goals() {
         const [savedProfile, savedGoals] = await Promise.all([apiClient.getProfile(), apiClient.getGoals()]);
         setProfile(savedProfile);
         setGoals(savedGoals.goals || []);
-        setPlan(savedGoals.wellnessPlan || null);
-        setFruitPreference(savedGoals.fruitPreference?.servings || 2);
         setError('');
       } catch (e) {
         setError(e.message);
@@ -61,29 +56,6 @@ export default function Goals() {
       const saved = await apiClient.updateGoal(edited.id, { target: edited.target });
       setGoals(saved.goals || []);
       setEditing(null);
-    } catch (e) {
-      setError(e.message);
-    }
-  }
-
-  async function handleFruitPreference(value) {
-    const servings = Number(value);
-    setFruitPreference(servings);
-    try {
-      const saved = await apiClient.updateGoalPreferences({ fruitPreference: { servings } });
-      setGoals(saved.goals || []);
-      setPlan(saved.wellnessPlan || null);
-    } catch (e) {
-      setError(e.message);
-    }
-  }
-
-  async function handleGenerate() {
-    try {
-      const saved = await apiClient.generateGoals();
-      setPlan(saved.wellnessPlan || null);
-      setMessage('Your wellness plan is ready!');
-      clearMessageLater();
     } catch (e) {
       setError(e.message);
     }
@@ -128,33 +100,6 @@ export default function Goals() {
           <div className="font-semibold">You&apos;re doing awesome! 🔥</div>
           <div className="text-sm text-gray-600 mt-2">Keep going to reach your next milestone.</div>
         </div>
-      </div>
-
-      <div className="mt-6 rounded-2xl bg-white p-4 shadow-sm">
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <h3 className="font-semibold text-lg">Your wellness plan</h3>
-            <p className="text-xs text-gray-600 mt-1">Personalized for {profile?.name?.trim() || 'you'}</p>
-          </div>
-          <button type="button" onClick={handleGenerate} className="rounded-lg bg-green-600 px-3 py-2 text-sm text-white">Refresh</button>
-        </div>
-        <div className="mt-4 text-sm text-gray-700">
-          Fruit variety preference
-          <DropdownSelect
-            id="fruit-preference"
-            ariaLabel="Fruit variety preference"
-            value={fruitPreference}
-            onChange={handleFruitPreference}
-            options={[1, 2, 3, 4, 5].map(value => ({ value, label: `${value} servings` }))}
-          />
-        </div>
-        {plan ? (
-          <div className="mt-4 grid gap-3 text-sm text-gray-700">
-            {Object.entries(plan).filter(([key]) => key !== 'generatedAt' && key !== 'tips').map(([key, value]) => (
-              <div key={key}><div className="font-semibold capitalize text-darkgreen">{key.replace(/([A-Z])/g, ' $1')}</div><div className="mt-1">{Array.isArray(value) ? value.join(' • ') : value}</div></div>
-            ))}
-          </div>
-        ) : <p className="mt-4 text-sm text-gray-600">No wellness plan has been generated yet.</p>}
       </div>
 
       <div className="mt-6">
