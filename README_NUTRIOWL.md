@@ -25,11 +25,11 @@ Notes:
 
 ## Backend
 
-The standalone API lives in `backend/` and persists per-user profiles, goals, and scan metadata in its own `backend/data/nutriowl.json` file. Start it separately from Vite:
+The API lives in `server/server.js` and persists per-user profiles, goals, and scan metadata in `data/nutriowl.json`. It also provides email/password signup and signin; passwords are stored as scrypt hashes and API requests use expiring bearer sessions. Deploy the API and frontend together with the `/api/*` Netlify proxy configured in `netlify.toml`.
 
 ```bash
 npm run api
 npm run dev
 ```
 
-See [backend/README.md](backend/README.md) for the endpoint reference, standalone run/test commands, configuration, and migration instructions. `X-User-Email` currently identifies accounts but does not authenticate them; connect a real authentication provider before exposing user data publicly.
+The frontend requires a reachable API for account registration and sign-in. Existing email-only records created before password authentication do not have credentials and cannot be signed into with the new flow; use a new email address to register.

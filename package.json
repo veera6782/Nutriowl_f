@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "api": "npm --prefix backend start",
+    "api": "node server/server.js",
     "api:test": "npm --prefix backend test",
     "build": "vite build",
     "preview": "vite preview"

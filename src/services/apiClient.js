@@ -1,15 +1,20 @@
 import goalsService from './goalsService';
 import profileService from './profileService';
 
-const profileStorageKey = 'nutriowl_profile';
+const AUTH_TOKEN_KEY = 'nutriowl_auth_token';
+const AUTH_EMAIL_KEY = 'nutriowl_auth_email';
 
-function currentEmail() {
-  try {
-    const profile = JSON.parse(localStorage.getItem(profileStorageKey) || '{}');
-    return String(profile.email || '').trim().toLowerCase();
-  } catch {
-    return '';
-  }
+function authToken() {
+  return localStorage.getItem(AUTH_TOKEN_KEY) || '';
+}
+
+export function getCurrentEmail() {
+  return localStorage.getItem(AUTH_EMAIL_KEY) || '';
+}
+
+function clearSession() {
+  localStorage.removeItem(AUTH_TOKEN_KEY);
+  localStorage.removeItem(AUTH_EMAIL_KEY);
 }
 
 function readLocalProfile() {
@@ -51,8 +56,7 @@ function fallbackRequest(path, options = {}) {
 
   if (path === '/api/profile' && method === 'POST') {
     const payload = options.body ? JSON.parse(options.body) : {};
-    const saved = profileService.saveProfile(payload);
-    return saved;
+    return profileService.saveProfile(payload);
   }
 
   if (path === '/api/goals' && method === 'GET') {
@@ -104,29 +108,16 @@ function fallbackRequest(path, options = {}) {
 }
 
 async function request(path, options = {}) {
+  let response;
   try {
-    const response = await fetch(path, {
+    response = await fetch(path, {
       ...options,
       headers: {
         'Content-Type': 'application/json',
-        'X-User-Email': currentEmail(),
+        ...(authToken() ? { Authorization: `Bearer ${authToken()}` } : {}),
         ...(options.headers || {})
       }
     });
-    const responseText = await response.text();
-    let body = null;
-    if (responseText.trim()) {
-      try {
-        body = JSON.parse(responseText);
-      } catch {
-        body = null;
-      }
-    }
-    if (!body) {
-      throw new Error(`The NutriOwl backend returned an unexpected response (${response.status}).`);
-    }
-    if (!response.ok) throw new Error(body.error || 'The NutriOwl backend request failed.');
-    return body;
   } catch (error) {
     const localFallback = fallbackRequest(path, options);
     if (localFallback !== undefined) {
@@ -134,6 +125,42 @@ async function request(path, options = {}) {
       return localFallback;
     }
     throw error;
+  }
+
+  const responseText = await response.text();
+  let body = null;
+  if (responseText.trim()) {
+    try {
+      body = JSON.parse(responseText);
+    } catch {
+      throw new Error(`The NutriOwl backend returned an unexpected response (${response.status}).`);
+    }
+  }
+  if (!response.ok) throw new Error(body?.error || 'The NutriOwl backend request failed.');
+  if (!body) throw new Error(`The NutriOwl backend returned an unexpected response (${response.status}).`);
+  return body;
+}
+
+async function startSession(path, email, password) {
+  const result = await request(path, { method: 'POST', body: JSON.stringify({ email, password }) });
+  localStorage.setItem(AUTH_TOKEN_KEY, result.token);
+  localStorage.setItem(AUTH_EMAIL_KEY, result.profile.email);
+  return result.profile;
+}
+
+export function signUp(email, password) {
+  return startSession('/api/auth/signup', email, password);
+}
+
+export function signIn(email, password) {
+  return startSession('/api/auth/signin', email, password);
+}
+
+export async function signOut() {
+  try {
+    await request('/api/auth/signout', { method: 'POST' });
+  } finally {
+    clearSession();
   }
 }
 

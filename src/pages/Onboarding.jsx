@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiActivity, FiArrowRight, FiBarChart2, FiCalendar, FiHeart, FiLock, FiMail, FiMaximize2, FiSun, FiTrendingUp, FiUser, FiZap } from 'react-icons/fi';
 import profileService from '../services/profileService';
@@ -70,12 +70,16 @@ function validate(form) {
 }
 
 export default function Onboarding() {
-  const [form, setForm] = useState(initialForm);
+  const [form, setForm] = useState(() => ({ ...initialForm, email: apiClient.getCurrentEmail() }));
   const [errors, setErrors] = useState({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [saving, setSaving] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!apiClient.getCurrentEmail()) navigate('/', { replace: true });
+  }, [navigate]);
 
   function handleField(key, value) {
     const next = { ...form, [key]: value };
@@ -113,14 +117,15 @@ export default function Onboarding() {
 
     setSubmitError('');
     setSaving(true);
-    profileService.saveProfile(profile);
     try {
       await apiClient.saveProfile(profile);
+      profileService.saveProfile(profile);
+      navigate('/home', { replace: true });
     } catch (error) {
-      console.warn('Unable to sync profile with the NutriOwl backend', error);
+      setSubmitError(error.message || 'Unable to save your profile. Please try again.');
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
-    navigate('/home', { replace: true });
   }
 
   return (
@@ -169,14 +174,13 @@ export default function Onboarding() {
                 <FiMail size={20} aria-hidden="true" />
               </div>
               <div className="flex-1">
-                <label className="block text-[14px] font-semibold text-darkgreen">2. What’s your Gmail ID / Email?</label>
+                <label className="block text-[14px] font-semibold text-darkgreen">2. Your account email</label>
                 <input
                   type="email"
                   value={form.email}
-                  onChange={(e) => handleField('email', e.target.value)}
-                  onBlur={handleBlur}
-                  placeholder="Enter your Gmail ID"
-                  className="mt-2 w-full border-0 bg-transparent p-0 text-[16px] text-darkgreen placeholder:text-gray-400 focus:outline-none"
+                  readOnly
+                  autoComplete="email"
+                  className="mt-2 w-full border-0 bg-transparent p-0 text-[16px] text-darkgreen focus:outline-none"
                 />
               </div>
             </div>

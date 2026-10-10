@@ -208,9 +208,15 @@ export default function Profile() {
     setModalType(null);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setModalType(null);
-    navigate('/', { replace: true });
+    try {
+      await apiClient.signOut();
+    } catch (error) {
+      console.warn('Unable to revoke the NutriOwl session; signed out on this device.', error);
+    } finally {
+      navigate('/', { replace: true });
+    }
   };
 
   return (
@@ -433,9 +439,9 @@ export default function Profile() {
 
           {modalType === 'privacy' && (
             <div className="space-y-4 text-base leading-7 text-gray-700">
-              <p>NutriOwl stores your profile and progress in your browser using localStorage so the app works without a backend.</p>
-              <p>Your data stays on this device. It is not stored on a secure remote server in this frontend-only version.</p>
-              <p>We do not claim that the data is encrypted or protected beyond the browser&apos;s normal local storage safeguards.</p>
+              <p>NutriOwl stores your account profile and goals on the app&apos;s API server. Your sign-in session is kept in this browser.</p>
+              <p>Passwords are stored as salted scrypt hashes by the API, not as plain text.</p>
+              <p>Use Log Out on shared devices to clear the local session.</p>
             </div>
           )}
 

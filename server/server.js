@@ -1,11 +1,15 @@
 import http from 'node:http';
+import { createHash, randomBytes, scrypt as scryptCallback, timingSafeEqual } from 'node:crypto';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { promisify } from 'node:util';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const databasePath = path.join(__dirname, '..', 'data', 'nutriowl.json');
 const port = Number(process.env.API_PORT || 3002);
+const scrypt = promisify(scryptCallback);
+const sessionDurationMs = 30 * 24 * 60 * 60 * 1000;
 
 const defaultGoals = [
   { id: 'scan', title: 'Scan a meal', type: 'count', unit: 'meal scanned', target: 1, progress: 0, daily: true },
@@ -34,7 +38,7 @@ function send(response, status, body) {
   response.writeHead(status, {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type, X-User-Email',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Allow-Methods': 'GET, POST, PATCH, OPTIONS'
   });
   response.end(JSON.stringify(body));
@@ -46,10 +50,100 @@ async function readBody(request) {
   return body ? JSON.parse(body) : {};
 }
 
-function userKey(request) {
-  const email = String(request.headers['x-user-email'] || '').trim().toLowerCase();
-  if (!email || !email.includes('@')) return null;
-  return email;
+function sessionToken(request) {
+  const authorization = String(request.headers.authorization || '');
+  return authorization.startsWith('Bearer ') ? authorization.slice(7) : '';
+}
+
+function tokenHash(token) {
+  return createHash('sha256').update(token).digest('hex');
+}
+
+function createSession(database, email) {
+  database.sessions ||= {};
+  const token = randomBytes(32).toString('base64url');
+  database.sessions[tokenHash(token)] = {
+    email,
+    expiresAt: Date.now() + sessionDurationMs
+  };
+  return token;
+}
+
+function authenticatedEmail(request, database) {
+  const token = sessionToken(request);
+  if (!token || !database.sessions) return null;
+
+  const sessionKey = tokenHash(token);
+  const session = database.sessions[sessionKey];
+  if (!session) return null;
+  if (session.expiresAt <= Date.now()) {
+    delete database.sessions[sessionKey];
+    return null;
+  }
+  return session.email;
+}
+
+function validEmail(email) {
+  return typeof email === 'string' && email.length <= 254 && /^\S+@\S+\.\S+$/.test(email);
+}
+
+async function hashPassword(password, salt) {
+  return scrypt(password, salt, 64);
+}
+
+async function authenticate(request, response, database, url) {
+  const input = await readBody(request);
+
+  if (url.pathname === '/api/auth/signup' && request.method === 'POST') {
+    const email = String(input.email || '').trim().toLowerCase();
+    const password = input.password;
+    if (!validEmail(email)) return send(response, 400, { error: 'Enter a valid email address.' });
+    if (typeof password !== 'string' || password.length < 8 || password.length > 128) {
+      return send(response, 400, { error: 'Password must be between 8 and 128 characters.' });
+    }
+    if (database.users?.[email]) return send(response, 409, { error: 'An account with this email already exists. Sign in instead.' });
+
+    const salt = randomBytes(16).toString('hex');
+    const passwordHash = await hashPassword(password, salt);
+    database.users ||= {};
+    const user = newUser({ email, onboardingCompleted: false });
+    user.passwordSalt = salt;
+    user.passwordHash = passwordHash.toString('hex');
+    database.users[email] = user;
+    const token = createSession(database, email);
+    await writeDatabase(database);
+    return send(response, 201, { token, profile: user.profile });
+  }
+
+  if (url.pathname === '/api/auth/signin' && request.method === 'POST') {
+    const email = String(input.email || '').trim().toLowerCase();
+    const password = input.password;
+    const user = database.users?.[email];
+    if (!validEmail(email) || typeof password !== 'string' || !user?.passwordSalt || !user?.passwordHash) {
+      return send(response, 401, { error: 'Email or password is incorrect.' });
+    }
+
+    const candidateHash = await hashPassword(password, user.passwordSalt);
+    const storedHash = Buffer.from(user.passwordHash, 'hex');
+    if (candidateHash.length !== storedHash.length || !timingSafeEqual(candidateHash, storedHash)) {
+      return send(response, 401, { error: 'Email or password is incorrect.' });
+    }
+
+    const token = createSession(database, email);
+    await writeDatabase(database);
+    return send(response, 200, { token, profile: user.profile });
+  }
+
+  if (url.pathname === '/api/auth/signout' && request.method === 'POST') {
+    const token = sessionToken(request);
+    const email = authenticatedEmail(request, database);
+    if (!email) return send(response, 401, { error: 'Please sign in to continue.' });
+    delete database.sessions[tokenHash(token)];
+    await writeDatabase(database);
+    return send(response, 200, { success: true });
+  }
+
+  return false;
 }
 
 function profileForStorage(input) {
@@ -132,12 +226,17 @@ async function handler(request, response) {
   if (request.method === 'OPTIONS') return send(response, 204, {});
   if (!request.url.startsWith('/api/')) return send(response, 404, { error: 'Not found' });
 
-  const key = userKey(request);
-  if (!key) return send(response, 400, { error: 'A valid X-User-Email header is required.' });
-
   const database = await readDatabase();
-  const user = getOrCreateUser(database, key);
   const url = new URL(request.url, `http://${request.headers.host}`);
+  if (url.pathname.startsWith('/api/auth/')) {
+    const authResponse = await authenticate(request, response, database, url);
+    if (authResponse !== false) return authResponse;
+  }
+
+  const key = authenticatedEmail(request, database);
+  if (!key) return send(response, 401, { error: 'Please sign in to continue.' });
+  const user = database.users?.[key];
+  if (!user) return send(response, 401, { error: 'Please sign in to continue.' });
 
   if (request.method === 'GET' && url.pathname === '/api/profile') {
     return send(response, 200, user.profile);
