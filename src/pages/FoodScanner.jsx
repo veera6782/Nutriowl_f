@@ -7,7 +7,7 @@ import ScanButton from '../components/ScanButton';
 import TipsCard from '../components/TipsCard';
 import RecentScanCard from '../components/RecentScanCard';
 import BottomNavigation from '../components/BottomNavigation';
-import { analyzeFood } from '../services/foodService';
+import { analyzeFood, preloadFoodModels } from '../services/foodService';
 
 export default function FoodScanner() {
   const [tab, setTab] = useState('camera');
@@ -16,6 +16,11 @@ export default function FoodScanner() {
   const [scanError, setScanError] = useState('');
   const [uploadedImage, setUploadedImage] = useState(null);
   const [scans, setScans] = useState([]);
+
+  // start downloading the on-device food models so the first scan is quick
+  React.useEffect(() => {
+    preloadFoodModels().catch(e => console.warn('Food models could not be preloaded', e));
+  }, []);
 
   // subscribe to real scan history
   React.useEffect(() => {
@@ -136,7 +141,10 @@ export default function FoodScanner() {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h2 id="scan-results-title" className="text-xl font-bold text-darkgreen">{result.food || 'Nutrition details'}</h2>
-                <p className="mt-1 text-sm text-gray-600">Nutrition per scanned serving</p>
+                <p className="mt-1 text-sm text-gray-600">
+                  {result.servingGrams ? `Estimated for a ${result.servingGrams} g serving` : 'Nutrition per scanned serving'}
+                  {result.confidence != null && ` · ${result.confidence}% match`}
+                </p>
               </div>
               {result.healthScore != null && (
                 <div className="shrink-0 rounded-xl bg-green-50 px-3 py-2 text-center">
@@ -149,6 +157,12 @@ export default function FoodScanner() {
             {result.isSample && (
               <p className="mt-3 rounded-xl bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900">
                 Demo estimate only. Image recognition is not connected, so these values may not match your food.
+              </p>
+            )}
+
+            {result.confidence != null && result.confidence < 40 && (
+              <p className="mt-3 rounded-xl bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900">
+                Low-confidence match. If this isn't your food, try a closer, well-lit photo of a single dish.
               </p>
             )}
 

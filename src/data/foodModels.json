@@ -1,0 +1,1768 @@
+{
+ "inputSize": 640,
+ "servingGrams": 150,
+ "models": [
+  {
+   "file": "/models/food_baseline.onnx",
+   "labels": [
+    "rice",
+    "eels on rice",
+    "pilaf",
+    "chicken-n-egg on rice",
+    "pork cutlet on rice",
+    "beef curry",
+    "sushi",
+    "chicken rice",
+    "fried rice",
+    "tempura bowl",
+    "bibimbap",
+    "toast",
+    "croissant",
+    "roll bread",
+    "raisin bread",
+    "chip butty",
+    "hamburger",
+    "pizza",
+    "sandwiches",
+    "udon noodle",
+    "tempura udon",
+    "soba noodle",
+    "ramen noodle",
+    "beef noodle",
+    "tensin noodle",
+    "fried noodle",
+    "spaghetti",
+    "Japanese-style pancake",
+    "takoyaki",
+    "gratin",
+    "sauteed vegetables",
+    "croquette",
+    "grilled eggplant",
+    "sauteed spinach",
+    "vegetable tempura",
+    "miso soup",
+    "potage",
+    "sausage",
+    "oden",
+    "omelet",
+    "ganmodoki",
+    "jiaozi",
+    "stew",
+    "teriyaki grilled fish",
+    "fried fish",
+    "grilled salmon",
+    "salmon meuniere",
+    "sashimi",
+    "grilled pacific saury",
+    "sukiyaki",
+    "sweet and sour pork",
+    "lightly roasted fish",
+    "steamed egg hotchpotch",
+    "tempura",
+    "fried chicken",
+    "sirloin cutlet",
+    "nanbanzuke",
+    "boiled fish",
+    "seasoned beef with potatoes",
+    "hambarg steak",
+    "steak",
+    "dried fish",
+    "ginger pork saute",
+    "spicy chili-flavored tofu",
+    "yakitori",
+    "cabbage roll",
+    "omelet",
+    "egg sunny-side up",
+    "natto",
+    "cold tofu",
+    "egg roll",
+    "chilled noodle",
+    "stir-fried beef and peppers",
+    "simmered pork",
+    "boiled chicken and vegetables",
+    "sashimi bowl",
+    "sushi bowl",
+    "fish-shaped pancake with bean jam",
+    "shrimp with chill source",
+    "roast chicken",
+    "steamed meat dumpling",
+    "omelet with fried rice",
+    "cutlet curry",
+    "spaghetti meat sauce",
+    "fried shrimp",
+    "potato salad",
+    "green salad",
+    "macaroni salad",
+    "Japanese tofu and vegetable chowder",
+    "pork miso soup",
+    "chinese soup",
+    "beef bowl",
+    "kinpira-style sauteed burdock",
+    "rice ball",
+    "pizza toast",
+    "dipping noodles",
+    "hot dog",
+    "french fries",
+    "mixed rice",
+    "goya chanpuru",
+    "green curry",
+    "okinawa soba",
+    "mango pudding",
+    "almond jelly",
+    "jjigae",
+    "dak galbi",
+    "dry curry",
+    "kamameshi",
+    "rice vermicelli",
+    "paella",
+    "tanmen",
+    "kushikatu",
+    "yellow curry",
+    "pancake",
+    "champon",
+    "crape",
+    "tiramisu",
+    "waffle",
+    "rare cheese cake",
+    "shortcake",
+    "chop suey",
+    "twice cooked pork",
+    "mushroom risotto",
+    "samul",
+    "zoni",
+    "french toast",
+    "fine white noodles",
+    "minestrone",
+    "pot au feu",
+    "chicken nugget",
+    "namero",
+    "french bread",
+    "rice gruel",
+    "broiled eel bowl",
+    "clear soup",
+    "yudofu",
+    "mozuku",
+    "inarizushi",
+    "pork loin cutlet",
+    "pork fillet cutlet",
+    "chicken cutlet",
+    "ham cutlet",
+    "minced meat cutlet",
+    "thinly sliced raw horsemeat",
+    "bagel",
+    "scone",
+    "tortilla",
+    "tacos",
+    "nachos",
+    "meat loaf",
+    "scrambled egg",
+    "rice gratin",
+    "lasagna",
+    "Caesar salad",
+    "oatmeal",
+    "fried pork dumplings served in soup",
+    "oshiruko",
+    "muffin",
+    "popcorn",
+    "cream puff",
+    "doughnut",
+    "apple pie",
+    "parfait",
+    "fried pork in scoop",
+    "lamb kebabs",
+    "dish consisting of stir-fried potato, eggplant and green pepper",
+    "roast duck",
+    "hot pot",
+    "pork belly",
+    "xiao long bao",
+    "moon cake",
+    "custard tart",
+    "beef noodle soup",
+    "pork cutlet",
+    "minced pork rice",
+    "fish ball soup",
+    "oyster omelette",
+    "glutinous oil rice",
+    "trunip pudding",
+    "stinky tofu",
+    "lemon fig jelly",
+    "khao soi",
+    "Sour prawn soup",
+    "Thai papaya salad",
+    "boned, sliced Hainan-style chicken with marinated rice",
+    "hot and sour, fish and vegetable ragout",
+    "stir-fried mixed vegetables",
+    "beef in oyster sauce",
+    "pork satay",
+    "spicy chicken salad",
+    "noodles with fish curry",
+    "Pork Sticky Noodles",
+    "Pork with lemon",
+    "stewed pork leg",
+    "charcoal-boiled pork neck",
+    "fried mussel pancakes",
+    "Deep Fried Chicken Wing",
+    "Barbecued red pork in sauce with rice",
+    "Rice with roast duck",
+    "Rice crispy pork",
+    "Wonton soup",
+    "Chicken Rice Curry With Coconut",
+    "Crispy Noodles",
+    "Egg Noodle In Chicken Yellow Curry",
+    "coconut milk soup",
+    "pho",
+    "Hue beef rice vermicelli soup",
+    "Vermicelli noodles with snails",
+    "Fried spring rolls",
+    "Steamed rice roll",
+    "Shrimp patties",
+    "ball shaped bun with pork",
+    "Coconut milk-flavored crepes with shrimp and beef",
+    "Small steamed savory rice pancake",
+    "Glutinous Rice Balls",
+    "loco moco",
+    "haupia",
+    "malasada",
+    "laulau",
+    "spam musubi",
+    "oxtail soup",
+    "adobo",
+    "lumpia",
+    "brownie",
+    "churro",
+    "jambalaya",
+    "nasi goreng",
+    "ayam goreng",
+    "ayam bakar",
+    "bubur ayam",
+    "gulai",
+    "laksa",
+    "mie ayam",
+    "mie goreng",
+    "nasi campur",
+    "nasi padang",
+    "nasi uduk",
+    "babi guling",
+    "kaya toast",
+    "bak kut teh",
+    "curry puff",
+    "chow mein",
+    "zha jiang mian",
+    "kung pao chicken",
+    "crullers",
+    "eggplant with garlic sauce",
+    "three cup chicken",
+    "bean curd family style",
+    "salt and pepper fried shrimp with shell",
+    "baked salmon",
+    "braised pork meat ball with napa cabbage",
+    "winter melon soup",
+    "steamed spareribs",
+    "chinese pumpkin pie",
+    "eight treasure rice",
+    "hot and sour soup"
+   ],
+   "specialist": false
+  },
+  {
+   "file": "/models/indian_food.onnx",
+   "labels": [
+    "aloo gobhi",
+    "aloo sabji",
+    "bhakarwadi",
+    "bhakri",
+    "bhindi",
+    "chole",
+    "coconut chutney",
+    "daal",
+    "dosa",
+    "eggs",
+    "idli",
+    "khandvi",
+    "medu vada",
+    "omelette",
+    "paratha",
+    "poha",
+    "puri",
+    "rajma",
+    "rice",
+    "roti phulka",
+    "saag",
+    "salad",
+    "sambhar",
+    "thepla",
+    "upma",
+    "varan",
+    "veg-pulao",
+    "yellow dhokla",
+    "yogurt"
+   ],
+   "specialist": true
+  }
+ ],
+ "nutrition": {
+  "rice": {
+   "calories": 130,
+   "fat": 0.3,
+   "carbs": 28.0,
+   "protein": 2.7,
+   "matched": "rice"
+  },
+  "eels on rice": {
+   "calories": 130,
+   "fat": 0.3,
+   "carbs": 28.0,
+   "protein": 2.7,
+   "matched": "rice"
+  },
+  "pilaf": {
+   "calories": 159.2,
+   "fat": 4.9,
+   "carbs": 25.6,
+   "protein": 2.5,
+   "matched": "pilaf"
+  },
+  "chicken-n-egg on rice": {
+   "calories": 165.0,
+   "fat": 3.6,
+   "carbs": 0.0,
+   "protein": 31.0,
+   "matched": "chicken"
+  },
+  "pork cutlet on rice": {
+   "calories": 238.0,
+   "fat": 14.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "pork"
+  },
+  "beef curry": {
+   "calories": 150,
+   "fat": 7.0,
+   "carbs": 16.0,
+   "protein": 6.0,
+   "matched": "curry"
+  },
+  "sushi": {
+   "calories": 150,
+   "fat": 2.5,
+   "carbs": 27.0,
+   "protein": 6.0,
+   "matched": "sushi"
+  },
+  "chicken rice": {
+   "calories": 165.0,
+   "fat": 3.6,
+   "carbs": 0.0,
+   "protein": 31.0,
+   "matched": "chicken"
+  },
+  "fried rice": {
+   "calories": 163,
+   "fat": 4.0,
+   "carbs": 26.0,
+   "protein": 5.0,
+   "matched": "fried rice"
+  },
+  "tempura bowl": {
+   "calories": 230,
+   "fat": 14.0,
+   "carbs": 18.0,
+   "protein": 7.0,
+   "matched": "tempura"
+  },
+  "toast": {
+   "calories": 313.1,
+   "fat": 4.2,
+   "carbs": 55.5,
+   "protein": 13.0,
+   "matched": "toast"
+  },
+  "croissant": {
+   "calories": 406.2,
+   "fat": 21.2,
+   "carbs": 45.9,
+   "protein": 8.0,
+   "matched": "croissants"
+  },
+  "roll bread": {
+   "calories": 265.4,
+   "fat": 4.2,
+   "carbs": 42.3,
+   "protein": 13.5,
+   "matched": "bread"
+  },
+  "raisin bread": {
+   "calories": 274.0,
+   "fat": 4.4,
+   "carbs": 52.0,
+   "protein": 7.9,
+   "matched": "raisin bread"
+  },
+  "hamburger": {
+   "calories": 295,
+   "fat": 14.0,
+   "carbs": 24.0,
+   "protein": 17.0,
+   "matched": "hamburger"
+  },
+  "pizza": {
+   "calories": 266,
+   "fat": 10.0,
+   "carbs": 33.0,
+   "protein": 11.0,
+   "matched": "pizza"
+  },
+  "sandwiches": {
+   "calories": 232.9,
+   "fat": 13.0,
+   "carbs": 17.9,
+   "protein": 11.0,
+   "matched": "sandwiches"
+  },
+  "udon noodle": {
+   "calories": 105,
+   "fat": 0.4,
+   "carbs": 22.0,
+   "protein": 3.0,
+   "matched": "udon"
+  },
+  "tempura udon": {
+   "calories": 230,
+   "fat": 14.0,
+   "carbs": 18.0,
+   "protein": 7.0,
+   "matched": "tempura"
+  },
+  "soba noodle": {
+   "calories": 99,
+   "fat": 0.7,
+   "carbs": 20.0,
+   "protein": 5.0,
+   "matched": "soba"
+  },
+  "ramen noodle": {
+   "calories": 140,
+   "fat": 5.0,
+   "carbs": 17.0,
+   "protein": 8.0,
+   "matched": "ramen"
+  },
+  "beef noodle": {
+   "calories": 250.0,
+   "fat": 15.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "beef"
+  },
+  "spaghetti": {
+   "calories": 131,
+   "fat": 1.1,
+   "carbs": 25.0,
+   "protein": 5.0,
+   "matched": "spaghetti"
+  },
+  "Japanese-style pancake": {
+   "calories": 227,
+   "fat": 8.0,
+   "carbs": 36.0,
+   "protein": 6.0,
+   "matched": "pancake"
+  },
+  "takoyaki": {
+   "calories": 200,
+   "fat": 8.0,
+   "carbs": 24.0,
+   "protein": 7.0,
+   "matched": "takoyaki"
+  },
+  "grilled eggplant": {
+   "calories": 24.8,
+   "fat": 0.2,
+   "carbs": 5.9,
+   "protein": 1.0,
+   "matched": "eggplant"
+  },
+  "vegetable tempura": {
+   "calories": 230,
+   "fat": 14.0,
+   "carbs": 18.0,
+   "protein": 7.0,
+   "matched": "tempura"
+  },
+  "miso soup": {
+   "calories": 40,
+   "fat": 1.5,
+   "carbs": 4.0,
+   "protein": 3.0,
+   "matched": "miso soup"
+  },
+  "sausage": {
+   "calories": 344.6,
+   "fat": 27.3,
+   "carbs": 4.2,
+   "protein": 19.3,
+   "matched": "sausage"
+  },
+  "omelet": {
+   "calories": 154,
+   "fat": 12.0,
+   "carbs": 0.6,
+   "protein": 11.0,
+   "matched": "omelet"
+  },
+  "stew": {
+   "calories": 106.0,
+   "fat": 3.2,
+   "carbs": 8.2,
+   "protein": 11.0,
+   "matched": "stews"
+  },
+  "teriyaki grilled fish": {
+   "calories": 90.0,
+   "fat": 13.0,
+   "carbs": 0.0,
+   "protein": 18.4,
+   "matched": "fish"
+  },
+  "fried fish": {
+   "calories": 90.0,
+   "fat": 13.0,
+   "carbs": 0.0,
+   "protein": 18.4,
+   "matched": "fish"
+  },
+  "grilled salmon": {
+   "calories": 178.0,
+   "fat": 8.0,
+   "carbs": 0.0,
+   "protein": 24.0,
+   "matched": "salmon"
+  },
+  "salmon meuniere": {
+   "calories": 178.0,
+   "fat": 8.0,
+   "carbs": 0.0,
+   "protein": 24.0,
+   "matched": "salmon"
+  },
+  "sashimi": {
+   "calories": 127,
+   "fat": 4.0,
+   "carbs": 0.0,
+   "protein": 22.0,
+   "matched": "sashimi"
+  },
+  "sweet and sour pork": {
+   "calories": 238.0,
+   "fat": 14.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "pork"
+  },
+  "lightly roasted fish": {
+   "calories": 90.0,
+   "fat": 13.0,
+   "carbs": 0.0,
+   "protein": 18.4,
+   "matched": "fish"
+  },
+  "steamed egg hotchpotch": {
+   "calories": 155,
+   "fat": 11.0,
+   "carbs": 1.1,
+   "protein": 13.0,
+   "matched": "egg"
+  },
+  "tempura": {
+   "calories": 230,
+   "fat": 14.0,
+   "carbs": 18.0,
+   "protein": 7.0,
+   "matched": "tempura"
+  },
+  "fried chicken": {
+   "calories": 250,
+   "fat": 15.0,
+   "carbs": 10.0,
+   "protein": 20.0,
+   "matched": "fried chicken"
+  },
+  "boiled fish": {
+   "calories": 90.0,
+   "fat": 13.0,
+   "carbs": 0.0,
+   "protein": 18.4,
+   "matched": "fish"
+  },
+  "seasoned beef with potatoes": {
+   "calories": 77.0,
+   "fat": 0.1,
+   "carbs": 17.0,
+   "protein": 2.0,
+   "matched": "potatoes"
+  },
+  "hambarg steak": {
+   "calories": 271,
+   "fat": 19.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "steak"
+  },
+  "steak": {
+   "calories": 271,
+   "fat": 19.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "steak"
+  },
+  "dried fish": {
+   "calories": 90.0,
+   "fat": 13.0,
+   "carbs": 0.0,
+   "protein": 18.4,
+   "matched": "fish"
+  },
+  "ginger pork saute": {
+   "calories": 80.0,
+   "fat": 0.8,
+   "carbs": 18.0,
+   "protein": 1.8,
+   "matched": "ginger"
+  },
+  "spicy chili-flavored tofu": {
+   "calories": 40.0,
+   "fat": 0.4,
+   "carbs": 8.9,
+   "protein": 1.8,
+   "matched": "chili"
+  },
+  "yakitori": {
+   "calories": 150,
+   "fat": 6.0,
+   "carbs": 2.0,
+   "protein": 22.0,
+   "matched": "yakitori"
+  },
+  "cabbage roll": {
+   "calories": 21.0,
+   "fat": 0.5,
+   "carbs": 3.2,
+   "protein": 1.3,
+   "matched": "cabbage"
+  },
+  "egg sunny-side up": {
+   "calories": 155,
+   "fat": 11.0,
+   "carbs": 1.1,
+   "protein": 13.0,
+   "matched": "egg"
+  },
+  "cold tofu": {
+   "calories": 73.0,
+   "fat": 4.8,
+   "carbs": 1.9,
+   "protein": 8.0,
+   "matched": "tofu"
+  },
+  "egg roll": {
+   "calories": 155,
+   "fat": 11.0,
+   "carbs": 1.1,
+   "protein": 13.0,
+   "matched": "egg"
+  },
+  "stir-fried beef and peppers": {
+   "calories": 40.0,
+   "fat": 0.2,
+   "carbs": 9.3,
+   "protein": 2.0,
+   "matched": "pepper"
+  },
+  "simmered pork": {
+   "calories": 238.0,
+   "fat": 14.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "pork"
+  },
+  "boiled chicken and vegetables": {
+   "calories": 165.0,
+   "fat": 3.6,
+   "carbs": 0.0,
+   "protein": 31.0,
+   "matched": "chicken"
+  },
+  "sashimi bowl": {
+   "calories": 127,
+   "fat": 4.0,
+   "carbs": 0.0,
+   "protein": 22.0,
+   "matched": "sashimi"
+  },
+  "sushi bowl": {
+   "calories": 150,
+   "fat": 2.5,
+   "carbs": 27.0,
+   "protein": 6.0,
+   "matched": "sushi"
+  },
+  "fish-shaped pancake with bean jam": {
+   "calories": 227,
+   "fat": 8.0,
+   "carbs": 36.0,
+   "protein": 6.0,
+   "matched": "pancake"
+  },
+  "shrimp with chill source": {
+   "calories": 99.0,
+   "fat": 0.3,
+   "carbs": 0.2,
+   "protein": 24.0,
+   "matched": "shrimp"
+  },
+  "roast chicken": {
+   "calories": 223.7,
+   "fat": 13.0,
+   "carbs": 0.0,
+   "protein": 23.5,
+   "matched": "roast chicken"
+  },
+  "omelet with fried rice": {
+   "calories": 163,
+   "fat": 4.0,
+   "carbs": 26.0,
+   "protein": 5.0,
+   "matched": "fried rice"
+  },
+  "cutlet curry": {
+   "calories": 150,
+   "fat": 7.0,
+   "carbs": 16.0,
+   "protein": 6.0,
+   "matched": "curry"
+  },
+  "spaghetti meat sauce": {
+   "calories": 131,
+   "fat": 1.1,
+   "carbs": 25.0,
+   "protein": 5.0,
+   "matched": "spaghetti"
+  },
+  "fried shrimp": {
+   "calories": 99.0,
+   "fat": 0.3,
+   "carbs": 0.2,
+   "protein": 24.0,
+   "matched": "shrimp"
+  },
+  "potato salad": {
+   "calories": 142.9,
+   "fat": 8.0,
+   "carbs": 11.1,
+   "protein": 2.8,
+   "matched": "potato salad"
+  },
+  "green salad": {
+   "calories": 50,
+   "fat": 2.0,
+   "carbs": 6.0,
+   "protein": 2.0,
+   "matched": "salad"
+  },
+  "macaroni salad": {
+   "calories": 372.5,
+   "fat": 1.5,
+   "carbs": 75.4,
+   "protein": 12.7,
+   "matched": "macaroni"
+  },
+  "Japanese tofu and vegetable chowder": {
+   "calories": 73.0,
+   "fat": 4.8,
+   "carbs": 1.9,
+   "protein": 8.0,
+   "matched": "tofu"
+  },
+  "pork miso soup": {
+   "calories": 40,
+   "fat": 1.5,
+   "carbs": 4.0,
+   "protein": 3.0,
+   "matched": "miso soup"
+  },
+  "chinese soup": {
+   "calories": 60,
+   "fat": 2.0,
+   "carbs": 8.0,
+   "protein": 3.0,
+   "matched": "soup"
+  },
+  "beef bowl": {
+   "calories": 250.0,
+   "fat": 15.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "beef"
+  },
+  "rice ball": {
+   "calories": 130,
+   "fat": 0.3,
+   "carbs": 28.0,
+   "protein": 2.7,
+   "matched": "rice"
+  },
+  "pizza toast": {
+   "calories": 313.1,
+   "fat": 4.2,
+   "carbs": 55.5,
+   "protein": 13.0,
+   "matched": "toast"
+  },
+  "dipping noodles": {
+   "calories": 138,
+   "fat": 2.0,
+   "carbs": 25.0,
+   "protein": 5.0,
+   "matched": "noodles"
+  },
+  "hot dog": {
+   "calories": 290,
+   "fat": 17.0,
+   "carbs": 22.0,
+   "protein": 11.0,
+   "matched": "hot dog"
+  },
+  "french fries": {
+   "calories": 312,
+   "fat": 15.0,
+   "carbs": 41.0,
+   "protein": 3.4,
+   "matched": "french fries"
+  },
+  "mixed rice": {
+   "calories": 130,
+   "fat": 0.3,
+   "carbs": 28.0,
+   "protein": 2.7,
+   "matched": "rice"
+  },
+  "goya chanpuru": {
+   "calories": 120,
+   "fat": 7.0,
+   "carbs": 5.0,
+   "protein": 10.0,
+   "matched": "goya chanpuru"
+  },
+  "green curry": {
+   "calories": 150,
+   "fat": 7.0,
+   "carbs": 16.0,
+   "protein": 6.0,
+   "matched": "curry"
+  },
+  "okinawa soba": {
+   "calories": 150,
+   "fat": 4.0,
+   "carbs": 20.0,
+   "protein": 7.0,
+   "matched": "okinawa soba"
+  },
+  "mango pudding": {
+   "calories": 60,
+   "fat": 0.4,
+   "carbs": 15.0,
+   "protein": 0.8,
+   "matched": "mango"
+  },
+  "dry curry": {
+   "calories": 145,
+   "fat": 6.0,
+   "carbs": 17.0,
+   "protein": 5.0,
+   "matched": "dry curry"
+  },
+  "rice vermicelli": {
+   "calories": 130,
+   "fat": 0.3,
+   "carbs": 28.0,
+   "protein": 2.7,
+   "matched": "rice"
+  },
+  "paella": {
+   "calories": 183.4,
+   "fat": 9.1,
+   "carbs": 14.1,
+   "protein": 10.4,
+   "matched": "paella"
+  },
+  "yellow curry": {
+   "calories": 150,
+   "fat": 7.0,
+   "carbs": 16.0,
+   "protein": 6.0,
+   "matched": "curry"
+  },
+  "pancake": {
+   "calories": 227,
+   "fat": 8.0,
+   "carbs": 36.0,
+   "protein": 6.0,
+   "matched": "pancake"
+  },
+  "waffle": {
+   "calories": 290.3,
+   "fat": 14.3,
+   "carbs": 32.7,
+   "protein": 7.9,
+   "matched": "waffles"
+  },
+  "rare cheese cake": {
+   "calories": 402.0,
+   "fat": 33.0,
+   "carbs": 1.3,
+   "protein": 25.0,
+   "matched": "cheese"
+  },
+  "twice cooked pork": {
+   "calories": 238.0,
+   "fat": 14.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "pork"
+  },
+  "mushroom risotto": {
+   "calories": 22.0,
+   "fat": 0.3,
+   "carbs": 3.3,
+   "protein": 3.1,
+   "matched": "mushroom"
+  },
+  "french toast": {
+   "calories": 229.2,
+   "fat": 10.9,
+   "carbs": 24.8,
+   "protein": 7.8,
+   "matched": "french toast"
+  },
+  "fine white noodles": {
+   "calories": 138,
+   "fat": 2.0,
+   "carbs": 25.0,
+   "protein": 5.0,
+   "matched": "noodles"
+  },
+  "chicken nugget": {
+   "calories": 165.0,
+   "fat": 3.6,
+   "carbs": 0.0,
+   "protein": 31.0,
+   "matched": "chicken"
+  },
+  "french bread": {
+   "calories": 265.4,
+   "fat": 4.2,
+   "carbs": 42.3,
+   "protein": 13.5,
+   "matched": "bread"
+  },
+  "rice gruel": {
+   "calories": 130,
+   "fat": 0.3,
+   "carbs": 28.0,
+   "protein": 2.7,
+   "matched": "rice"
+  },
+  "broiled eel bowl": {
+   "calories": 236.0,
+   "fat": 15.0,
+   "carbs": 0.0,
+   "protein": 24.0,
+   "matched": "eel"
+  },
+  "clear soup": {
+   "calories": 60,
+   "fat": 2.0,
+   "carbs": 8.0,
+   "protein": 3.0,
+   "matched": "soup"
+  },
+  "pork loin cutlet": {
+   "calories": 238.0,
+   "fat": 14.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "pork"
+  },
+  "pork fillet cutlet": {
+   "calories": 238.0,
+   "fat": 14.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "pork"
+  },
+  "chicken cutlet": {
+   "calories": 165.0,
+   "fat": 3.6,
+   "carbs": 0.0,
+   "protein": 31.0,
+   "matched": "chicken"
+  },
+  "ham cutlet": {
+   "calories": 145.0,
+   "fat": 6.0,
+   "carbs": 1.5,
+   "protein": 21.0,
+   "matched": "ham"
+  },
+  "bagel": {
+   "calories": 250.0,
+   "fat": 1.5,
+   "carbs": 49.0,
+   "protein": 10.1,
+   "matched": "bagels"
+  },
+  "scone": {
+   "calories": 352.5,
+   "fat": 16.2,
+   "carbs": 44.7,
+   "protein": 7.0,
+   "matched": "scones"
+  },
+  "tortilla": {
+   "calories": 218.0,
+   "fat": 2.9,
+   "carbs": 45.0,
+   "protein": 6.0,
+   "matched": "tortilla"
+  },
+  "tacos": {
+   "calories": 226,
+   "fat": 10.0,
+   "carbs": 20.0,
+   "protein": 12.0,
+   "matched": "tacos"
+  },
+  "nachos": {
+   "calories": 346,
+   "fat": 19.0,
+   "carbs": 36.0,
+   "protein": 9.0,
+   "matched": "nachos"
+  },
+  "scrambled egg": {
+   "calories": 166,
+   "fat": 12.2,
+   "carbs": 1.6,
+   "protein": 11.1,
+   "matched": "scrambled egg"
+  },
+  "rice gratin": {
+   "calories": 130,
+   "fat": 0.3,
+   "carbs": 28.0,
+   "protein": 2.7,
+   "matched": "rice"
+  },
+  "lasagna": {
+   "calories": 165,
+   "fat": 7.0,
+   "carbs": 17.0,
+   "protein": 9.0,
+   "matched": "lasagna"
+  },
+  "Caesar salad": {
+   "calories": 150,
+   "fat": 10.0,
+   "carbs": 8.0,
+   "protein": 8.0,
+   "matched": "caesar salad"
+  },
+  "oatmeal": {
+   "calories": 68.0,
+   "fat": 1.4,
+   "carbs": 12.0,
+   "protein": 2.4,
+   "matched": "oatmeal"
+  },
+  "fried pork dumplings served in soup": {
+   "calories": 230.0,
+   "fat": 5.4,
+   "carbs": 39.0,
+   "protein": 6.2,
+   "matched": "dumplings"
+  },
+  "muffin": {
+   "calories": 235.5,
+   "fat": 1.8,
+   "carbs": 45.8,
+   "protein": 7.8,
+   "matched": "english muffins"
+  },
+  "popcorn": {
+   "calories": 375,
+   "fat": 4.5,
+   "carbs": 74.0,
+   "protein": 11.0,
+   "matched": "popcorn"
+  },
+  "cream puff": {
+   "calories": 336.3,
+   "fat": 36.6,
+   "carbs": 2.7,
+   "protein": 2.8,
+   "matched": "cream"
+  },
+  "doughnut": {
+   "calories": 452,
+   "fat": 25.0,
+   "carbs": 51.0,
+   "protein": 5.0,
+   "matched": "doughnut"
+  },
+  "apple pie": {
+   "calories": 236.7,
+   "fat": 11.0,
+   "carbs": 34.5,
+   "protein": 1.8,
+   "matched": "apple pie"
+  },
+  "fried pork in scoop": {
+   "calories": 238.0,
+   "fat": 14.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "pork"
+  },
+  "lamb kebabs": {
+   "calories": 294.1,
+   "fat": 21.1,
+   "carbs": 0.0,
+   "protein": 24.7,
+   "matched": "lamb"
+  },
+  "dish consisting of stir-fried potato, eggplant and green pepper": {
+   "calories": 24.8,
+   "fat": 0.2,
+   "carbs": 5.9,
+   "protein": 1.0,
+   "matched": "eggplant"
+  },
+  "roast duck": {
+   "calories": 337.0,
+   "fat": 28.0,
+   "carbs": 0.0,
+   "protein": 19.0,
+   "matched": "duck"
+  },
+  "pork belly": {
+   "calories": 238.0,
+   "fat": 14.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "pork"
+  },
+  "moon cake": {
+   "calories": 350,
+   "fat": 15.0,
+   "carbs": 50.0,
+   "protein": 5.0,
+   "matched": "cake"
+  },
+  "custard tart": {
+   "calories": 117.5,
+   "fat": 4.0,
+   "carbs": 17.2,
+   "protein": 4.0,
+   "matched": "custard"
+  },
+  "beef noodle soup": {
+   "calories": 250.0,
+   "fat": 15.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "beef"
+  },
+  "pork cutlet": {
+   "calories": 238.0,
+   "fat": 14.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "pork"
+  },
+  "minced pork rice": {
+   "calories": 238.0,
+   "fat": 14.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "pork"
+  },
+  "fish ball soup": {
+   "calories": 90.0,
+   "fat": 13.0,
+   "carbs": 0.0,
+   "protein": 18.4,
+   "matched": "fish"
+  },
+  "oyster omelette": {
+   "calories": 154,
+   "fat": 12.0,
+   "carbs": 0.6,
+   "protein": 11.0,
+   "matched": "omelette"
+  },
+  "glutinous oil rice": {
+   "calories": 130,
+   "fat": 0.3,
+   "carbs": 28.0,
+   "protein": 2.7,
+   "matched": "rice"
+  },
+  "stinky tofu": {
+   "calories": 73.0,
+   "fat": 4.8,
+   "carbs": 1.9,
+   "protein": 8.0,
+   "matched": "tofu"
+  },
+  "lemon fig jelly": {
+   "calories": 29.0,
+   "fat": 0.3,
+   "carbs": 9.0,
+   "protein": 1.1,
+   "matched": "lemon"
+  },
+  "Sour prawn soup": {
+   "calories": 60,
+   "fat": 2.0,
+   "carbs": 8.0,
+   "protein": 3.0,
+   "matched": "soup"
+  },
+  "Thai papaya salad": {
+   "calories": 43,
+   "fat": 0.3,
+   "carbs": 11.0,
+   "protein": 0.5,
+   "matched": "papaya"
+  },
+  "boned, sliced Hainan-style chicken with marinated rice": {
+   "calories": 165.0,
+   "fat": 3.6,
+   "carbs": 0.0,
+   "protein": 31.0,
+   "matched": "chicken"
+  },
+  "hot and sour, fish and vegetable ragout": {
+   "calories": 90.0,
+   "fat": 13.0,
+   "carbs": 0.0,
+   "protein": 18.4,
+   "matched": "fish"
+  },
+  "stir-fried mixed vegetables": {
+   "calories": 32.0,
+   "fat": 0.3,
+   "carbs": 6.9,
+   "protein": 1.7,
+   "matched": "mixed vegetables"
+  },
+  "beef in oyster sauce": {
+   "calories": 250.0,
+   "fat": 15.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "beef"
+  },
+  "pork satay": {
+   "calories": 238.0,
+   "fat": 14.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "pork"
+  },
+  "spicy chicken salad": {
+   "calories": 227.0,
+   "fat": 16.0,
+   "carbs": 2.9,
+   "protein": 17.0,
+   "matched": "chicken salad"
+  },
+  "noodles with fish curry": {
+   "calories": 138,
+   "fat": 2.0,
+   "carbs": 25.0,
+   "protein": 5.0,
+   "matched": "noodles"
+  },
+  "Pork Sticky Noodles": {
+   "calories": 138,
+   "fat": 2.0,
+   "carbs": 25.0,
+   "protein": 5.0,
+   "matched": "noodles"
+  },
+  "Pork with lemon": {
+   "calories": 29.0,
+   "fat": 0.3,
+   "carbs": 9.0,
+   "protein": 1.1,
+   "matched": "lemon"
+  },
+  "stewed pork leg": {
+   "calories": 238.0,
+   "fat": 14.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "pork"
+  },
+  "charcoal-boiled pork neck": {
+   "calories": 238.0,
+   "fat": 14.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "pork"
+  },
+  "fried mussel pancakes": {
+   "calories": 226.6,
+   "fat": 9.6,
+   "carbs": 28.4,
+   "protein": 6.3,
+   "matched": "pancakes"
+  },
+  "Deep Fried Chicken Wing": {
+   "calories": 250,
+   "fat": 15.0,
+   "carbs": 10.0,
+   "protein": 20.0,
+   "matched": "fried chicken"
+  },
+  "Barbecued red pork in sauce with rice": {
+   "calories": 238.0,
+   "fat": 14.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "pork"
+  },
+  "Rice with roast duck": {
+   "calories": 337.0,
+   "fat": 28.0,
+   "carbs": 0.0,
+   "protein": 19.0,
+   "matched": "duck"
+  },
+  "Rice crispy pork": {
+   "calories": 238.0,
+   "fat": 14.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "pork"
+  },
+  "Wonton soup": {
+   "calories": 180,
+   "fat": 5.0,
+   "carbs": 24.0,
+   "protein": 9.0,
+   "matched": "wonton"
+  },
+  "Chicken Rice Curry With Coconut": {
+   "calories": 165.0,
+   "fat": 3.6,
+   "carbs": 0.0,
+   "protein": 31.0,
+   "matched": "chicken"
+  },
+  "Crispy Noodles": {
+   "calories": 138,
+   "fat": 2.0,
+   "carbs": 25.0,
+   "protein": 5.0,
+   "matched": "noodles"
+  },
+  "Egg Noodle In Chicken Yellow Curry": {
+   "calories": 165.0,
+   "fat": 3.6,
+   "carbs": 0.0,
+   "protein": 31.0,
+   "matched": "chicken"
+  },
+  "coconut milk soup": {
+   "calories": 230.0,
+   "fat": 24.0,
+   "carbs": 6.0,
+   "protein": 2.3,
+   "matched": "coconut milk"
+  },
+  "Hue beef rice vermicelli soup": {
+   "calories": 250.0,
+   "fat": 15.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "beef"
+  },
+  "Vermicelli noodles with snails": {
+   "calories": 138,
+   "fat": 2.0,
+   "carbs": 25.0,
+   "protein": 5.0,
+   "matched": "noodles"
+  },
+  "Fried spring rolls": {
+   "calories": 154.3,
+   "fat": 8.0,
+   "carbs": 4.3,
+   "protein": 16.2,
+   "matched": "spring rolls"
+  },
+  "Steamed rice roll": {
+   "calories": 130,
+   "fat": 0.3,
+   "carbs": 28.0,
+   "protein": 2.7,
+   "matched": "rice"
+  },
+  "Shrimp patties": {
+   "calories": 99.0,
+   "fat": 0.3,
+   "carbs": 0.2,
+   "protein": 24.0,
+   "matched": "shrimp"
+  },
+  "ball shaped bun with pork": {
+   "calories": 238.0,
+   "fat": 14.0,
+   "carbs": 0.0,
+   "protein": 26.0,
+   "matched": "pork"
+  },
+  "Coconut milk-flavored crepes with shrimp and beef": {
+   "calories": 230.0,
+   "fat": 24.0,
+   "carbs": 6.0,
+   "protein": 2.3,
+   "matched": "coconut milk"
+  },
+  "Small steamed savory rice pancake": {
+   "calories": 227,
+   "fat": 8.0,
+   "carbs": 36.0,
+   "protein": 6.0,
+   "matched": "pancake"
+  },
+  "Glutinous Rice Balls": {
+   "calories": 130,
+   "fat": 0.3,
+   "carbs": 28.0,
+   "protein": 2.7,
+   "matched": "rice"
+  },
+  "oxtail soup": {
+   "calories": 60,
+   "fat": 2.0,
+   "carbs": 8.0,
+   "protein": 3.0,
+   "matched": "soup"
+  },
+  "brownie": {
+   "calories": 405,
+   "fat": 18.0,
+   "carbs": 55.0,
+   "protein": 5.0,
+   "matched": "brownie"
+  },
+  "jambalaya": {
+   "calories": 156.0,
+   "fat": 7.4,
+   "carbs": 15.0,
+   "protein": 7.1,
+   "matched": "jambalaya"
+  },
+  "kaya toast": {
+   "calories": 313.1,
+   "fat": 4.2,
+   "carbs": 55.5,
+   "protein": 13.0,
+   "matched": "toast"
+  },
+  "curry puff": {
+   "calories": 150,
+   "fat": 7.0,
+   "carbs": 16.0,
+   "protein": 6.0,
+   "matched": "curry"
+  },
+  "chow mein": {
+   "calories": 150,
+   "fat": 5.0,
+   "carbs": 22.0,
+   "protein": 6.0,
+   "matched": "chow mein"
+  },
+  "kung pao chicken": {
+   "calories": 165.0,
+   "fat": 3.6,
+   "carbs": 0.0,
+   "protein": 31.0,
+   "matched": "chicken"
+  },
+  "eggplant with garlic sauce": {
+   "calories": 24.8,
+   "fat": 0.2,
+   "carbs": 5.9,
+   "protein": 1.0,
+   "matched": "eggplant"
+  },
+  "three cup chicken": {
+   "calories": 165.0,
+   "fat": 3.6,
+   "carbs": 0.0,
+   "protein": 31.0,
+   "matched": "chicken"
+  },
+  "bean curd family style": {
+   "calories": 60,
+   "fat": 3.0,
+   "carbs": 4.7,
+   "protein": 3.5,
+   "matched": "curd"
+  },
+  "salt and pepper fried shrimp with shell": {
+   "calories": 99.0,
+   "fat": 0.3,
+   "carbs": 0.2,
+   "protein": 24.0,
+   "matched": "shrimp"
+  },
+  "baked salmon": {
+   "calories": 178.0,
+   "fat": 8.0,
+   "carbs": 0.0,
+   "protein": 24.0,
+   "matched": "salmon"
+  },
+  "braised pork meat ball with napa cabbage": {
+   "calories": 21.0,
+   "fat": 0.5,
+   "carbs": 3.2,
+   "protein": 1.3,
+   "matched": "cabbage"
+  },
+  "winter melon soup": {
+   "calories": 60,
+   "fat": 2.0,
+   "carbs": 8.0,
+   "protein": 3.0,
+   "matched": "soup"
+  },
+  "eight treasure rice": {
+   "calories": 130,
+   "fat": 0.3,
+   "carbs": 28.0,
+   "protein": 2.7,
+   "matched": "rice"
+  },
+  "hot and sour soup": {
+   "calories": 60,
+   "fat": 2.0,
+   "carbs": 8.0,
+   "protein": 3.0,
+   "matched": "soup"
+  },
+  "aloo gobhi": {
+   "calories": 120,
+   "fat": 6.0,
+   "carbs": 14.0,
+   "protein": 3.0,
+   "matched": "aloo gobhi"
+  },
+  "aloo sabji": {
+   "calories": 100,
+   "fat": 4.0,
+   "carbs": 14.0,
+   "protein": 2.0,
+   "matched": "aloo sabji"
+  },
+  "bhakarwadi": {
+   "calories": 450,
+   "fat": 25.0,
+   "carbs": 50.0,
+   "protein": 8.0,
+   "matched": "bhakarwadi"
+  },
+  "bhakri": {
+   "calories": 300,
+   "fat": 5.0,
+   "carbs": 55.0,
+   "protein": 8.0,
+   "matched": "bhakri"
+  },
+  "bhindi": {
+   "calories": 80,
+   "fat": 4.0,
+   "carbs": 9.0,
+   "protein": 2.0,
+   "matched": "bhindi"
+  },
+  "chole": {
+   "calories": 160,
+   "fat": 5.0,
+   "carbs": 22.0,
+   "protein": 8.0,
+   "matched": "chole"
+  },
+  "coconut chutney": {
+   "calories": 130,
+   "fat": 10.0,
+   "carbs": 8.0,
+   "protein": 2.0,
+   "matched": "coconut chutney"
+  },
+  "daal": {
+   "calories": 116,
+   "fat": 0.4,
+   "carbs": 20.0,
+   "protein": 8.0,
+   "matched": "daal"
+  },
+  "dosa": {
+   "calories": 133,
+   "fat": 2.7,
+   "carbs": 22.0,
+   "protein": 4.0,
+   "matched": "dosa"
+  },
+  "eggs": {
+   "calories": 155,
+   "fat": 11.0,
+   "carbs": 1.1,
+   "protein": 13.0,
+   "matched": "eggs"
+  },
+  "idli": {
+   "calories": 58,
+   "fat": 0.4,
+   "carbs": 11.0,
+   "protein": 2.0,
+   "matched": "idli"
+  },
+  "khandvi": {
+   "calories": 150,
+   "fat": 8.0,
+   "carbs": 15.0,
+   "protein": 5.0,
+   "matched": "khandvi"
+  },
+  "medu vada": {
+   "calories": 240,
+   "fat": 12.0,
+   "carbs": 28.0,
+   "protein": 6.0,
+   "matched": "medu vada"
+  },
+  "omelette": {
+   "calories": 154,
+   "fat": 12.0,
+   "carbs": 0.6,
+   "protein": 11.0,
+   "matched": "omelette"
+  },
+  "paratha": {
+   "calories": 260,
+   "fat": 10.0,
+   "carbs": 36.0,
+   "protein": 6.0,
+   "matched": "paratha"
+  },
+  "poha": {
+   "calories": 160,
+   "fat": 5.0,
+   "carbs": 25.0,
+   "protein": 3.0,
+   "matched": "poha"
+  },
+  "puri": {
+   "calories": 350,
+   "fat": 18.0,
+   "carbs": 42.0,
+   "protein": 6.0,
+   "matched": "puri"
+  },
+  "rajma": {
+   "calories": 130,
+   "fat": 3.5,
+   "carbs": 18.0,
+   "protein": 7.0,
+   "matched": "rajma"
+  },
+  "roti phulka": {
+   "calories": 297,
+   "fat": 3.7,
+   "carbs": 60.0,
+   "protein": 9.0,
+   "matched": "roti phulka"
+  },
+  "saag": {
+   "calories": 100,
+   "fat": 6.0,
+   "carbs": 10.0,
+   "protein": 4.0,
+   "matched": "saag"
+  },
+  "salad": {
+   "calories": 50,
+   "fat": 2.0,
+   "carbs": 6.0,
+   "protein": 2.0,
+   "matched": "salad"
+  },
+  "sambhar": {
+   "calories": 65,
+   "fat": 2.0,
+   "carbs": 9.0,
+   "protein": 3.0,
+   "matched": "sambhar"
+  },
+  "thepla": {
+   "calories": 280,
+   "fat": 12.0,
+   "carbs": 35.0,
+   "protein": 7.0,
+   "matched": "thepla"
+  },
+  "upma": {
+   "calories": 130,
+   "fat": 4.0,
+   "carbs": 20.0,
+   "protein": 3.5,
+   "matched": "upma"
+  },
+  "varan": {
+   "calories": 120,
+   "fat": 3.0,
+   "carbs": 18.0,
+   "protein": 5.0,
+   "matched": "varan"
+  },
+  "veg-pulao": {
+   "calories": 160,
+   "fat": 4.0,
+   "carbs": 26.0,
+   "protein": 4.0,
+   "matched": "veg-pulao"
+  },
+  "yellow dhokla": {
+   "calories": 160,
+   "fat": 4.0,
+   "carbs": 24.0,
+   "protein": 6.0,
+   "matched": "yellow dhokla"
+  },
+  "yogurt": {
+   "calories": 60,
+   "fat": 3.0,
+   "carbs": 4.7,
+   "protein": 3.5,
+   "matched": "yogurt"
+  }
+ }
+}
