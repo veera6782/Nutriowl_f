@@ -218,6 +218,16 @@ export function updateProfile(partialProfile) {
   return saveProfile(nextProfile);
 }
 
+// Forgets the cached profile (on sign-out or an expired session) and tells listeners.
+export function clearProfile() {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (error) {
+    console.warn('Unable to clear the cached profile', error);
+  }
+  notifyListeners(loadProfile());
+}
+
 export function subscribe(listener) {
   listeners.push(listener);
   return () => {
@@ -267,6 +277,7 @@ export default {
   saveProfile,
   updateProfile,
   refreshDerivedProfile,
+  clearProfile,
   subscribe,
   recordMealScan,
   markActivityToday,

@@ -1,20 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { chatStorageKey, clearChat, loadChat, saveChat, toApiMessages, MAX_API_MESSAGES } from '../src/services/chatHistory';
 import * as apiClient from '../src/services/apiClient';
-
-function memoryStorage() {
-  const data = new Map();
-  return {
-    getItem: key => (data.has(key) ? data.get(key) : null),
-    setItem: (key, value) => data.set(key, String(value)),
-    removeItem: key => data.delete(key),
-    clear: () => data.clear()
-  };
-}
-
-function jsonResponse(status, body) {
-  return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
-}
+import { jsonResponse, memoryStorage } from './helpers';
 
 const conversation = [
   { id: '1', role: 'user', content: 'What should I eat for breakfast?', timestamp: 't1' },

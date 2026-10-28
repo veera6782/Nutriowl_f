@@ -54,6 +54,7 @@ const en = {
     confirmPassword: 'Retype password',
     confirmPlaceholder: 'Retype your password',
     pleaseWait: 'Please wait...',
+    sessionExpired: 'Your session expired, please sign in again.',
     terms: 'By continuing, you agree to NutriOwl\'s healthy habits and personalized guidance.',
     errors: {
       invalidEmail: 'Please enter a valid email address.',
@@ -209,7 +210,7 @@ const en = {
     networkError: 'Couldn\'t reach NutriOwl. Check your connection and try again.',
     retry: 'Retry',
     dailyLimit: 'You have reached today\'s chat limit. Please try again tomorrow.',
-    sessionExpired: 'Your session has expired. Sign in again to keep chatting.',
+    signedOut: 'Signed out — sign in again for personalized answers.',
     signIn: 'Sign in',
     disclaimer: 'NutriOwl gives general wellness information, not medical advice.'
   },
