@@ -1,134 +1,148 @@
 import React, { useEffect, useRef, useState } from 'react';
-import ChatMessage from '../components/ChatMessage';
+import { useNavigate } from 'react-router-dom';
+import { FiPlus } from 'react-icons/fi';
+import ChatMessage, { TypingIndicator } from '../components/ChatMessage';
 import ChatInput from '../components/ChatInput';
-import nutriService from '../services/nutriOwlChat';
+import { useI18n } from '../i18n/LanguageContext';
+import * as apiClient from '../services/apiClient';
+import { loadChat, saveChat } from '../services/chatHistory';
 import BottomNavigation from '../components/BottomNavigation';
-
-const STORAGE_KEY = 'nutriowl_chat_messages';
 
 function makeId() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 }
 
-const defaultConversation = [
-  {
-    id: makeId(),
-    sender: 'user',
-    text: 'What are some high protein foods?',
-    timestamp: new Date().toISOString()
-  },
-  {
-    id: makeId(),
-    sender: 'owl',
-    text: 'Great question! Here are some high-protein foods you can include in your meals: eggs, chicken or fish (if you eat animal products), paneer or tofu, lentils and beans, Greek yogurt and dairy, and nuts & seeds.',
-    timestamp: new Date().toISOString()
-  },
-  {
-    id: makeId(),
-    sender: 'user',
-    text: 'How much water should I drink daily?',
-    timestamp: new Date().toISOString()
-  },
-  {
-    id: makeId(),
-    sender: 'owl',
-    text: 'A common guideline is about 6–8 cups (1.5–2 liters) per day for many adults, but needs vary with activity, climate, and body size. Drink more when exercising or in hot weather.',
-    timestamp: new Date().toISOString()
-  }
-];
+function makeMessage(role, content, source) {
+  return { id: makeId(), role, content, timestamp: new Date().toISOString(), ...(source ? { source } : {}) };
+}
 
 export default function Chat() {
-  const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { t, language } = useI18n();
+  // The conversation is stored per signed-in user (or as "guest" when signed out).
+  const [email, setEmail] = useState(() => apiClient.getCurrentEmail());
+  const [messages, setMessages] = useState(() => loadChat(email));
+  const [sending, setSending] = useState(false);
+  // UI-only notices; never part of the history sent to the API.
+  // { kind: 'limit', text } | { kind: 'error' } | { kind: 'unauthorized' }
+  const [notice, setNotice] = useState(null);
   const listRef = useRef(null);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) {
-          setMessages(parsed);
-          return;
-        }
-      }
-    } catch (e) {
-      console.warn('Failed to load chat from storage, using default conversation', e);
-    }
-
-    setMessages(defaultConversation);
-  }, []);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-    } catch (e) {
-      console.warn('Failed to save chat to storage', e);
-    }
-  }, [messages]);
+    saveChat(email, messages);
+  }, [email, messages]);
 
   useEffect(() => {
     if (!listRef.current) return;
     listRef.current.scrollTop = listRef.current.scrollHeight;
-  }, [messages, loading]);
+  }, [messages, sending, notice]);
 
-  async function sendMessage(text) {
-    const userMsg = { id: makeId(), sender: 'user', text, timestamp: new Date().toISOString() };
-    setMessages(prev => [...prev, userMsg]);
-
-    setLoading(true);
-    const placeholder = { id: 'thinking', sender: 'owl', text: 'NutriOwl is thinking...', timestamp: new Date().toISOString() };
-    setMessages(prev => [...prev, placeholder]);
-
+  async function requestReply(history) {
+    setSending(true);
+    setNotice(null);
     try {
-      const response = await nutriService.getNutriOwlResponse(text);
-      setMessages(prev => prev.filter(m => m.id !== 'thinking'));
-      const owlMsg = { id: makeId(), sender: 'owl', text: response, timestamp: new Date().toISOString() };
-      setMessages(prev => [...prev, owlMsg]);
-    } catch (e) {
-      setMessages(prev => prev.filter(m => m.id !== 'thinking'));
-      const errMsg = { id: makeId(), sender: 'owl', text: 'Sorry, something went wrong while preparing a response.', timestamp: new Date().toISOString() };
-      setMessages(prev => [...prev, errMsg]);
-      console.error(e);
+      const { response, source } = await apiClient.sendChat(history);
+      setMessages(current => [...current, makeMessage('assistant', response, source)]);
+    } catch (error) {
+      if (error.status === 429) {
+        setNotice({ kind: 'limit', text: error.message });
+      } else if (error.status === 401) {
+        // Same as signing out: the session and this user's saved chat are cleared.
+        apiClient.clearSession();
+        setEmail('');
+        setMessages([]);
+        setNotice({ kind: 'unauthorized' });
+      } else {
+        console.error('NutriOwl chat request failed', error);
+        setNotice({ kind: 'error' });
+      }
     } finally {
-      setLoading(false);
+      setSending(false);
     }
   }
+
+  function sendMessage(text) {
+    if (sending || !text.trim()) return;
+    const history = [...messages, makeMessage('user', text.trim())];
+    setMessages(history);
+    requestReply(history);
+  }
+
+  function handleNewChat() {
+    setMessages([]);
+    setNotice(null);
+  }
+
+  let noticeText = null;
+  if (notice?.kind === 'limit') noticeText = language === 'en' && notice.text ? notice.text : t('chat.dailyLimit');
+  if (notice?.kind === 'error') noticeText = t('chat.networkError');
+  if (notice?.kind === 'unauthorized') noticeText = t('chat.sessionExpired');
 
   return (
     <div className="h-dvh overflow-hidden bg-cream">
       <div className="mx-auto flex h-full max-w-3xl flex-col px-6 pt-6 pb-28">
         <header className="mb-4 flex shrink-0 items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-green-800">NutriOwl Chat</h1>
-            <p className="text-gray-600">Your friendly nutrition buddy is here to help!</p>
+            <h1 className="text-3xl font-bold text-green-800">{t('chat.title')}</h1>
+            <p className="text-gray-600">{t('chat.subtitle')}</p>
           </div>
           <div className="w-28 h-28 overflow-hidden rounded-full bg-[#edf8ed] p-1 shadow-[0_8px_16px_rgba(46,94,62,0.08)]">
-            <img src="/nutriowl_mascot_full.jpg" alt="NutriOwl mascot" className="w-full h-full object-cover rounded-full" />
+            <img src="/nutriowl_mascot_full.jpg" alt={t('common.mascotAlt')} className="w-full h-full object-cover rounded-full" />
           </div>
         </header>
 
         <section className="mb-4 shrink-0 rounded-2xl bg-green-50 p-4 shadow-inner">
           <div className="flex items-start gap-4">
             <div className="h-12 w-12 overflow-hidden rounded-full bg-white p-1 shadow-sm">
-              <img src="/nutriowl_mascot_full.jpg" alt="NutriOwl mascot" className="h-full w-full rounded-full object-cover" />
+              <img src="/nutriowl_mascot_full.jpg" alt={t('common.mascotAlt')} className="h-full w-full rounded-full object-cover" />
             </div>
-            <div>
-              <div className="font-semibold text-green-800">Hi there!</div>
-              <div className="text-gray-600">Ask me anything about nutrition, healthy eating or your diet!</div>
+            <div className="flex-1">
+              <div className="font-semibold text-green-800">{t('chat.greeting')}</div>
+              <div className="text-gray-600">{t('chat.intro')}</div>
             </div>
           </div>
         </section>
 
         <div className="flex min-h-0 flex-1 flex-col rounded-2xl bg-white p-4 shadow-sm">
-          <div ref={listRef} className="min-h-0 flex-1 overflow-y-auto py-2">
+          {messages.length > 0 && (
+            <div className="flex shrink-0 justify-end">
+              <button
+                type="button"
+                onClick={handleNewChat}
+                disabled={sending}
+                className="inline-flex items-center gap-1 rounded-full bg-green-50 px-3 py-1.5 text-sm font-medium text-green-800 transition hover:bg-green-100 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <FiPlus aria-hidden="true" />
+                {t('chat.newChat')}
+              </button>
+            </div>
+          )}
+
+          <div ref={listRef} className="min-h-0 flex-1 overflow-y-auto py-2" aria-live="polite">
             {messages.map(m => (
               <ChatMessage key={m.id} message={m} />
             ))}
+            {sending && <TypingIndicator />}
+            {notice && (
+              <div role="alert" className="mx-auto mb-4 max-w-[90%] rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-center text-sm text-red-800">
+                <p>{noticeText}</p>
+                {notice.kind === 'error' && (
+                  <button type="button" onClick={() => requestReply(messages)} className="mt-2 rounded-full bg-white px-4 py-1.5 font-medium text-red-800 shadow-sm ring-1 ring-red-200">
+                    {t('chat.retry')}
+                  </button>
+                )}
+                {notice.kind === 'unauthorized' && (
+                  <button type="button" onClick={() => navigate('/')} className="mt-2 rounded-full bg-[#4CAF50] px-4 py-1.5 font-medium text-white shadow-sm">
+                    {t('chat.signIn')}
+                  </button>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="mt-3 shrink-0 border-t border-green-50 bg-white pt-3">
-            <ChatInput onSend={sendMessage} disabled={loading} />
+            <ChatInput onSend={sendMessage} disabled={sending} />
+            <p className="mt-2 text-center text-xs text-gray-500">{t('chat.disclaimer')}</p>
           </div>
         </div>
 

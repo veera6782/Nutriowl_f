@@ -1,8 +1,11 @@
 import goalsService from './goalsService';
 import profileService from './profileService';
+import { clearChat, toApiMessages } from './chatHistory';
 
 const AUTH_TOKEN_KEY = 'nutriowl_auth_token';
 const AUTH_EMAIL_KEY = 'nutriowl_auth_email';
+// The backend gives up on the AI provider after ~25s; allow for that plus network time.
+const CHAT_TIMEOUT_MS = 35000;
 
 function authToken() {
   return localStorage.getItem(AUTH_TOKEN_KEY) || '';
@@ -12,9 +15,16 @@ export function getCurrentEmail() {
   return localStorage.getItem(AUTH_EMAIL_KEY) || '';
 }
 
-function clearSession() {
+// Ends the session on this device, including the signed-in user's saved chat.
+export function clearSession() {
+  clearChat(getCurrentEmail());
   localStorage.removeItem(AUTH_TOKEN_KEY);
   localStorage.removeItem(AUTH_EMAIL_KEY);
+}
+
+// Errors from the API carry the HTTP status so callers can tell 401/429/5xx apart.
+function apiError(status, message) {
+  return Object.assign(new Error(message), { status });
 }
 
 function readLocalProfile() {
@@ -133,11 +143,11 @@ async function request(path, options = {}) {
     try {
       body = JSON.parse(responseText);
     } catch {
-      throw new Error(`The NutriOwl backend returned an unexpected response (${response.status}).`);
+      throw apiError(response.status, `The NutriOwl backend returned an unexpected response (${response.status}).`);
     }
   }
-  if (!response.ok) throw new Error(body?.error || 'The NutriOwl backend request failed.');
-  if (!body) throw new Error(`The NutriOwl backend returned an unexpected response (${response.status}).`);
+  if (!response.ok) throw apiError(response.status, body?.error || 'The NutriOwl backend request failed.');
+  if (!body) throw apiError(response.status, `The NutriOwl backend returned an unexpected response (${response.status}).`);
   return body;
 }
 
@@ -186,4 +196,14 @@ export function updateGoal(id, patch) {
 
 export function updateGoalPreferences(preferences) {
   return request('/api/goals/preferences', { method: 'PATCH', body: JSON.stringify(preferences) });
+}
+
+// Sends the conversation (oldest first, newest user message last) and resolves to
+// { response, source } where source is "ai", "fallback" or "safety".
+export function sendChat(messages) {
+  return request('/api/chat', {
+    method: 'POST',
+    body: JSON.stringify({ messages: toApiMessages(messages) }),
+    signal: AbortSignal.timeout(CHAT_TIMEOUT_MS)
+  });
 }

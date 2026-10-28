@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import BottomNavigation from '../components/BottomNavigation';
 import RecentScanCard from '../components/RecentScanCard';
+import { useI18n } from '../i18n/LanguageContext';
 import scanService from '../services/scanService';
 import OwlAssistant from '../components/OwlAssistant';
 
 export default function History() {
+  const { t, locale } = useI18n();
   const [scans, setScans] = useState([]);
 
   useEffect(() => {
@@ -22,10 +24,10 @@ export default function History() {
   return (
     <div className="min-h-screen bg-cream font-poppins text-darkgreen p-4 pb-32">
       <div className="flex items-start justify-between">
-        <button aria-label="Back" className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center">{'<'}</button>
+        <button aria-label={t('common.back')} className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center">{'<'}</button>
         <div className="flex-1 mx-4">
-          <h1 className="text-3xl font-bold">Scan History</h1>
-          <p className="text-sm text-gray-600 mt-1">Your saved scans are shown below.</p>
+          <h1 className="text-3xl font-bold">{t('history.title')}</h1>
+          <p className="text-sm text-gray-600 mt-1">{t('history.subtitle')}</p>
         </div>
         <div className="w-24 h-24">
           <OwlAssistant />
@@ -37,12 +39,12 @@ export default function History() {
           <div className="flex flex-col gap-3">
             {scans.map(item => (
               <div key={item.id} className="p-2">
-                <RecentScanCard item={{ id: item.id, food: item.name || item.food || 'Unknown', calories: item.calories || 0, time: new Date(item.timestamp).toLocaleString(), image: item.image || '/placeholder1.jpg' }} />
+                <RecentScanCard item={{ id: item.id, food: item.name || item.food || t('common.unknown'), calories: item.calories || 0, time: new Date(item.timestamp).toLocaleString(locale), image: item.image || '/placeholder1.jpg' }} />
               </div>
             ))}
           </div>
         ) : (
-          <div className="text-gray-600 p-6 text-center">No scans yet. Try scanning your first meal!</div>
+          <div className="text-gray-600 p-6 text-center">{t('history.empty')}</div>
         )}
       </div>
 

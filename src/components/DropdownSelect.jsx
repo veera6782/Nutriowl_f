@@ -1,7 +1,9 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
 import { FiCheck, FiChevronDown } from 'react-icons/fi';
+import { useI18n } from '../i18n/LanguageContext';
 
 export default function DropdownSelect({ id, ariaLabel, value, options, onChange }) {
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const rootRef = useRef(null);
   const buttonRef = useRef(null);
@@ -53,7 +55,7 @@ export default function DropdownSelect({ id, ariaLabel, value, options, onChange
         className="flex w-full items-center justify-between rounded-2xl border border-[#dfe7d5] bg-white px-3 py-3 text-left text-darkgreen focus:outline-none focus:ring-2 focus:ring-green-300"
         onClick={() => setIsOpen(open => !open)}
       >
-        <span>{selectedOption?.label || 'Choose an option'}</span>
+        <span>{selectedOption?.label || t('common.chooseOption')}</span>
         <FiChevronDown className={`ml-3 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
       </button>
 
