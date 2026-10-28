@@ -7,13 +7,15 @@ import ScanButton from '../components/ScanButton';
 import TipsCard from '../components/TipsCard';
 import RecentScanCard from '../components/RecentScanCard';
 import BottomNavigation from '../components/BottomNavigation';
+import { useI18n } from '../i18n/LanguageContext';
 import { analyzeFood, preloadFoodModels } from '../services/foodService';
 
 export default function FoodScanner() {
+  const { t, locale } = useI18n();
   const [tab, setTab] = useState('camera');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
-  const [scanError, setScanError] = useState('');
+  const [scanFailed, setScanFailed] = useState(false);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [scans, setScans] = useState([]);
 
@@ -49,7 +51,7 @@ export default function FoodScanner() {
   async function handleCapture(imageBlob) {
     setLoading(true);
     setResult(null);
-    setScanError('');
+    setScanFailed(false);
     try {
       const res = await analyzeFood(imageBlob);
       setResult(res);
@@ -82,7 +84,7 @@ export default function FoodScanner() {
       }
     } catch (e) {
       console.error(e);
-      setScanError('We could not analyze this image. Please try another photo.');
+      setScanFailed(true);
     } finally {
       // keep loading a little to show animation
       setTimeout(() => setLoading(false), 800);
@@ -93,25 +95,25 @@ export default function FoodScanner() {
     <div className="min-h-screen bg-cream font-poppins text-darkgreen p-4 pb-32">
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
         <div className="flex items-start justify-between">
-          <button aria-label="Back" className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center">{
+          <button aria-label={t('common.back')} className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center">{
             '<'
           }</button>
           <div className="flex-1 mx-4">
-            <h1 className="text-3xl font-bold">Scan Food</h1>
-            <p className="text-sm text-gray-600 mt-1">Scan your meal and discover its nutrition!</p>
+            <h1 className="text-3xl font-bold">{t('scanner.title')}</h1>
+            <p className="text-sm text-gray-600 mt-1">{t('scanner.subtitle')}</p>
           </div>
           <div className="w-24 h-24 overflow-hidden rounded-full bg-[#edf8ed] p-1 shadow-[0_8px_16px_rgba(46,94,62,0.08)]">
-            <img src="/nutriowl_mascot_full.jpg" alt="NutriOwl mascot" className="h-full w-full object-cover rounded-full" />
+            <img src="/nutriowl_mascot_full.jpg" alt={t('common.mascotAlt')} className="h-full w-full object-cover rounded-full" />
           </div>
         </div>
 
         <div className="mt-6 bg-white rounded-2xl shadow-sm p-2">
           <div className="flex items-center gap-4">
             <button onClick={() => setTab('camera')} className={`flex-1 py-3 rounded-lg ${tab === 'camera' ? 'bg-green-100 text-darkgreen' : 'text-gray-600'}`}>
-              <span className="inline-flex items-center gap-2 justify-center"><span className="bg-green-500 text-white p-1 rounded-full"><FiCamera size={16} aria-hidden="true" /></span> Camera</span>
+              <span className="inline-flex items-center gap-2 justify-center"><span className="bg-green-500 text-white p-1 rounded-full"><FiCamera size={16} aria-hidden="true" /></span> {t('scanner.camera')}</span>
             </button>
             <button onClick={() => setTab('upload')} className={`flex-1 py-3 rounded-lg ${tab === 'upload' ? 'bg-green-100 text-darkgreen' : 'text-gray-600'}`}>
-              <span className="inline-flex items-center gap-2 justify-center"><span className="bg-transparent text-darkgreen p-1 rounded-full"><FiImage size={18} aria-hidden="true" /></span> Upload Photo</span>
+              <span className="inline-flex items-center gap-2 justify-center"><span className="bg-transparent text-darkgreen p-1 rounded-full"><FiImage size={18} aria-hidden="true" /></span> {t('scanner.upload')}</span>
             </button>
           </div>
 
@@ -130,9 +132,9 @@ export default function FoodScanner() {
           </div>
         </div>
 
-        {scanError && (
+        {scanFailed && (
           <div role="alert" className="mt-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
-            {scanError}
+            {t('scanner.error')}
           </div>
         )}
 
@@ -140,46 +142,46 @@ export default function FoodScanner() {
           <section aria-labelledby="scan-results-title" className="mt-6 rounded-2xl bg-white p-5 shadow-sm">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <h2 id="scan-results-title" className="text-xl font-bold text-darkgreen">{result.food || 'Nutrition details'}</h2>
+                <h2 id="scan-results-title" className="text-xl font-bold text-darkgreen">{result.food || t('scanner.nutritionDetails')}</h2>
                 <p className="mt-1 text-sm text-gray-600">
-                  {result.servingGrams ? `Estimated for a ${result.servingGrams} g serving` : 'Nutrition per scanned serving'}
-                  {result.confidence != null && ` · ${result.confidence}% match`}
+                  {result.servingGrams ? t('scanner.servingEstimate', { grams: result.servingGrams }) : t('scanner.perServing')}
+                  {result.confidence != null && ` · ${t('scanner.match', { percent: result.confidence })}`}
                 </p>
               </div>
               {result.healthScore != null && (
                 <div className="shrink-0 rounded-xl bg-green-50 px-3 py-2 text-center">
                   <div className="text-lg font-bold text-green-800">{result.healthScore}</div>
-                  <div className="text-xs text-gray-600">Health score</div>
+                  <div className="text-xs text-gray-600">{t('scanner.healthScore')}</div>
                 </div>
               )}
             </div>
 
             {result.isSample && (
               <p className="mt-3 rounded-xl bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900">
-                Demo estimate only. Image recognition is not connected, so these values may not match your food.
+                {t('scanner.demoNotice')}
               </p>
             )}
 
             {result.confidence != null && result.confidence < 40 && (
               <p className="mt-3 rounded-xl bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900">
-                Low-confidence match. If this isn't your food, try a closer, well-lit photo of a single dish.
+                {t('scanner.lowConfidence')}
               </p>
             )}
 
             <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
               {[
-                ['Calories', result.calories, 'kcal'],
-                ['Protein', result.protein, 'g'],
-                ['Carbohydrates', result.carbs ?? result.carbohydrates, 'g'],
-                ['Fat', result.fat ?? result.fats, 'g'],
-                ['Sugar', result.sugar, 'g'],
-                ['Fiber', result.fiber, 'g'],
-                ['Sodium', result.sodium, 'mg']
-              ].map(([label, value, unit]) => (
-                <div key={label} className="rounded-xl bg-[#f6f8f2] px-3 py-3">
-                  <div className="text-xs text-gray-600">{label}</div>
+                ['calories', result.calories, 'kcal'],
+                ['protein', result.protein, 'g'],
+                ['carbohydrates', result.carbs ?? result.carbohydrates, 'g'],
+                ['fat', result.fat ?? result.fats, 'g'],
+                ['sugar', result.sugar, 'g'],
+                ['fiber', result.fiber, 'g'],
+                ['sodium', result.sodium, 'mg']
+              ].map(([nutrient, value, unit]) => (
+                <div key={nutrient} className="rounded-xl bg-[#f6f8f2] px-3 py-3">
+                  <div className="text-xs text-gray-600">{t(`nutrients.${nutrient}`)}</div>
                   <div className="mt-1 font-semibold text-darkgreen">
-                    {value == null || value === '' ? 'Not available' : `${value} ${unit}`}
+                    {value == null || value === '' ? t('common.notAvailable') : `${value} ${t(`units.${unit}`)}`}
                   </div>
                 </div>
               ))}
@@ -187,22 +189,22 @@ export default function FoodScanner() {
 
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
               {[
-                ['Vitamins', result.vitamins],
-                ['Minerals', result.minerals]
-              ].map(([title, items]) => (
-                <div key={title}>
-                  <h3 className="font-semibold text-darkgreen">{title}</h3>
+                ['vitamins', 'vitamin', result.vitamins],
+                ['minerals', 'mineral', result.minerals]
+              ].map(([titleKey, singularKey, items]) => (
+                <div key={titleKey}>
+                  <h3 className="font-semibold text-darkgreen">{t(`scanner.${titleKey}`)}</h3>
                   {Array.isArray(items) && items.length ? (
                     <ul className="mt-2 flex flex-wrap gap-2">
                       {items.map((item, index) => {
                         const label = typeof item === 'string'
                           ? item
-                          : `${item.name || item.label || title.slice(0, -1)}${item.amount != null || item.value != null ? `: ${item.amount ?? item.value} ${item.unit || ''}` : ''}`;
+                          : `${item.name || item.label || t(`scanner.${singularKey}`)}${item.amount != null || item.value != null ? `: ${item.amount ?? item.value} ${item.unit || ''}` : ''}`;
                         return <li key={`${label}-${index}`} className="rounded-full bg-green-50 px-3 py-1 text-sm text-green-900">{label}</li>;
                       })}
                     </ul>
                   ) : (
-                    <p className="mt-1 text-sm text-gray-500">Not available</p>
+                    <p className="mt-1 text-sm text-gray-500">{t('common.notAvailable')}</p>
                   )}
                 </div>
               ))}
@@ -216,16 +218,16 @@ export default function FoodScanner() {
 
         <div className="mt-6">
           <div className="flex items-center justify-between px-1">
-            <h3 className="font-semibold text-lg">Recent Scans</h3>
-            <button className="text-green-600 font-medium">View All ›</button>
+            <h3 className="font-semibold text-lg">{t('common.recentScans')}</h3>
+            <button className="text-green-600 font-medium">{t('common.viewAll')} ›</button>
           </div>
           <div className="mt-3 flex gap-3 overflow-x-auto py-2">
             {scans && scans.length ? (
               scans.slice(0,5).map(item => (
-                <RecentScanCard key={item.id} item={{ id: item.id, food: item.name || item.food || 'Unknown', calories: item.calories || 0, time: new Date(item.timestamp).toLocaleString(), image: item.image || '/placeholder1.jpg' }} />
+                <RecentScanCard key={item.id} item={{ id: item.id, food: item.name || item.food || t('common.unknown'), calories: item.calories || 0, time: new Date(item.timestamp).toLocaleString(locale), image: item.image || '/placeholder1.jpg' }} />
               ))
             ) : (
-              <div className="bg-white rounded-2xl p-4 shadow-sm text-gray-600">No recent scans yet. Try scanning your first meal!</div>
+              <div className="bg-white rounded-2xl p-4 shadow-sm text-gray-600">{t('scanner.noRecent')}</div>
             )}
           </div>
         </div>
@@ -235,11 +237,11 @@ export default function FoodScanner() {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/40 flex items-center justify-center z-40">
           <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-white rounded-xl p-6 w-80 flex flex-col items-center gap-4">
             <div className="w-32 h-32 overflow-hidden rounded-full bg-[#edf8ed] p-2 shadow-[0_8px_16px_rgba(46,94,62,0.08)]">
-              <img src="/nutriowl_mascot_full.jpg" alt="NutriOwl mascot" className="h-full w-full object-cover rounded-full" />
+              <img src="/nutriowl_mascot_full.jpg" alt={t('common.mascotAlt')} className="h-full w-full object-cover rounded-full" />
             </div>
             <div className="text-center">
-              <p className="font-semibold">Analyzing your meal...</p>
-              <p className="text-sm text-gray-600 mt-1">This may take a moment</p>
+              <p className="font-semibold">{t('scanner.analyzing')}</p>
+              <p className="text-sm text-gray-600 mt-1">{t('scanner.mayTakeMoment')}</p>
             </div>
             <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
               <motion.div className="h-3 bg-green-400" initial={{ width: '0%' }} animate={{ width: '80%' }} transition={{ repeat: Infinity, duration: 1.6 }} />

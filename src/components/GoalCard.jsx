@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FiActivity, FiCamera, FiDroplet, FiHeart, FiSun, FiTarget, FiZap } from 'react-icons/fi';
+import { useI18n } from '../i18n/LanguageContext';
 
 const goalIcons = {
   scan: FiCamera,
@@ -12,6 +13,8 @@ const goalIcons = {
 };
 
 export default function GoalCard({ goal, onIncrement, onEdit }) {
+  const { t, goalTitle, goalUnit } = useI18n();
+  const title = goalTitle(goal);
   const completed = typeof goal.target === 'number' && goal.progress >= goal.target;
   const progressPct = goal.target ? Math.round((goal.progress / goal.target) * 100) : 0;
   const Icon = goalIcons[goal.id] || FiTarget;
@@ -24,13 +27,13 @@ export default function GoalCard({ goal, onIncrement, onEdit }) {
             <Icon size={23} strokeWidth={1.9} aria-hidden="true" />
           </div>
           <div>
-            <div className="font-semibold text-lg text-darkgreen">{goal.title}</div>
-            <div className="text-sm text-gray-600 mt-1">{goal.progress} / {goal.target} {goal.unit}</div>
+            <div className="font-semibold text-lg text-darkgreen">{title}</div>
+            <div className="text-sm text-gray-600 mt-1">{goal.progress} / {goal.target} {goalUnit(goal.unit)}</div>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button aria-label={`Edit ${goal.title}`} onClick={() => onEdit(goal)} className="text-sm text-green-600 px-3 py-2 rounded-lg">Edit</button>
-          <button aria-label={`Add to ${goal.title}`} onClick={() => onIncrement(goal)} className={`w-10 h-10 rounded-full flex items-center justify-center ${completed ? 'bg-green-100 text-green-600' : 'bg-green-600 text-white'}`}>
+          <button aria-label={t('goals.editAria', { goal: title })} onClick={() => onEdit(goal)} className="text-sm text-green-600 px-3 py-2 rounded-lg">{t('common.edit')}</button>
+          <button aria-label={t('goals.addAria', { goal: title })} onClick={() => onIncrement(goal)} className={`w-10 h-10 rounded-full flex items-center justify-center ${completed ? 'bg-green-100 text-green-600' : 'bg-green-600 text-white'}`}>
             +
           </button>
         </div>
@@ -43,7 +46,7 @@ export default function GoalCard({ goal, onIncrement, onEdit }) {
       </div>
 
       <div className="mt-3 flex items-center justify-between text-sm text-green-600">
-        <div>{completed ? 'Completed' : `${progressPct}%`}</div>
+        <div>{completed ? t('goals.completed') : `${progressPct}%`}</div>
         {completed && <div aria-hidden className="bg-green-100 text-green-700 px-3 py-1 rounded-full">✓</div>}
       </div>
     </div>

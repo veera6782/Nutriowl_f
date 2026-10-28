@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiActivity, FiArrowRight, FiBarChart2, FiCalendar, FiHeart, FiLock, FiMail, FiMaximize2, FiSun, FiTrendingUp, FiUser, FiZap } from 'react-icons/fi';
+import LanguageToggle from '../components/LanguageToggle';
+import { useI18n } from '../i18n/LanguageContext';
 import profileService from '../services/profileService';
 import * as apiClient from '../services/apiClient';
 
@@ -15,19 +17,9 @@ const initialForm = {
   onboardingCompleted: false
 };
 
-const activityOptions = [
-  { key: 'low', title: 'Lightly Active', desc: 'Walking, casual activity, 10–15 min/day' },
-  { key: 'moderate', title: 'Moderately Active', desc: 'Sports or active play regularly' },
-  { key: 'high', title: 'Highly Active', desc: 'Frequent sports, training or vigorous activity' }
-];
-
-const goalOptions = [
-  { key: 'balanced', title: 'Eat More Balanced', desc: 'Build healthier everyday eating habits' },
-  { key: 'strength', title: 'Build Strength', desc: 'Support strength and active living' },
-  { key: 'energy', title: 'More Energy', desc: 'Choose foods that support your daily activities' },
-  { key: 'performance', title: 'Improve Sports Performance', desc: 'Fuel your activities and recovery' },
-  { key: 'habits', title: 'Build Healthy Habits', desc: 'Create a balanced routine' }
-];
+// Titles and descriptions live in the i18n dictionaries under onboarding.activity / onboarding.goals.
+const activityOptions = ['low', 'moderate', 'high'];
+const goalOptions = ['balanced', 'strength', 'energy', 'performance', 'habits'];
 
 const activityIcons = {
   low: FiActivity,
@@ -47,34 +39,37 @@ function isValidEmail(val) {
   return /\S+@\S+\.\S+/.test(val || '');
 }
 
+// Returns i18n keys rather than text, so messages follow the language toggle.
 function validate(form) {
   const nextErrors = {};
 
-  if (!form.name || form.name.trim().length < 2) nextErrors.name = 'Please enter your name';
-  if (!form.email) nextErrors.email = 'Please enter your email';
-  else if (!isValidEmail(form.email)) nextErrors.email = 'Please enter a valid email address';
+  if (!form.name || form.name.trim().length < 2) nextErrors.name = 'onboarding.errors.name';
+  if (!form.email) nextErrors.email = 'onboarding.errors.emailRequired';
+  else if (!isValidEmail(form.email)) nextErrors.email = 'onboarding.errors.emailInvalid';
 
-  if (!form.age) nextErrors.age = 'Please enter your age';
-  else if (Number(form.age) <= 0 || Number(form.age) > 120) nextErrors.age = 'Please enter a sensible age';
+  if (!form.age) nextErrors.age = 'onboarding.errors.ageRequired';
+  else if (Number(form.age) <= 0 || Number(form.age) > 120) nextErrors.age = 'onboarding.errors.ageInvalid';
 
-  if (!form.height) nextErrors.height = 'Please enter your height';
-  else if (Number(form.height) <= 30 || Number(form.height) > 300) nextErrors.height = 'Please enter a sensible height';
+  if (!form.height) nextErrors.height = 'onboarding.errors.heightRequired';
+  else if (Number(form.height) <= 30 || Number(form.height) > 300) nextErrors.height = 'onboarding.errors.heightInvalid';
 
-  if (!form.weight) nextErrors.weight = 'Please enter your weight';
-  else if (Number(form.weight) <= 10 || Number(form.weight) > 600) nextErrors.weight = 'Please enter a sensible weight';
+  if (!form.weight) nextErrors.weight = 'onboarding.errors.weightRequired';
+  else if (Number(form.weight) <= 10 || Number(form.weight) > 600) nextErrors.weight = 'onboarding.errors.weightInvalid';
 
-  if (!form.activityLevel) nextErrors.activityLevel = 'Please select your activity level';
-  if (!form.goals.length) nextErrors.goals = 'Please select at least one goal';
+  if (!form.activityLevel) nextErrors.activityLevel = 'onboarding.errors.activity';
+  if (!form.goals.length) nextErrors.goals = 'onboarding.errors.goals';
 
   return nextErrors;
 }
 
 export default function Onboarding() {
+  const { t } = useI18n();
   const [form, setForm] = useState(() => ({ ...initialForm, email: apiClient.getCurrentEmail() }));
   const [errors, setErrors] = useState({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [submitError, setSubmitError] = useState('');
+  // { key } for our own message, { text } for a server message.
+  const [submitError, setSubmitError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -115,14 +110,14 @@ export default function Onboarding() {
       onboardingCompleted: true
     };
 
-    setSubmitError('');
+    setSubmitError(null);
     setSaving(true);
     try {
       await apiClient.saveProfile(profile);
       profileService.saveProfile(profile);
       navigate('/home', { replace: true });
     } catch (error) {
-      setSubmitError(error.message || 'Unable to save your profile. Please try again.');
+      setSubmitError(error.message ? { text: error.message } : { key: 'onboarding.errors.save' });
     } finally {
       setSaving(false);
     }
@@ -131,19 +126,23 @@ export default function Onboarding() {
   return (
     <div className="min-h-screen bg-cream font-poppins text-darkgreen">
       <div className="mx-auto max-w-[420px] px-4 pb-8 pt-3">
+        <div className="flex justify-end">
+          <LanguageToggle />
+        </div>
+
         <div className="relative mt-4">
           <div className="absolute right-1 top-2 h-14 w-14 rounded-full bg-green-100/60 blur-sm" />
           <div className="absolute right-10 top-10 h-10 w-10 rounded-full bg-green-100/60 blur-sm" />
           <div className="relative flex items-start justify-between gap-3">
             <div className="flex-1 pt-2">
-              <h1 className="text-[3rem] font-bold leading-[0.98] tracking-[-0.05em]">Let’s get to <br /> know you!</h1>
+              <h1 className="whitespace-pre-line text-[3rem] font-bold leading-[0.98] tracking-[-0.05em]">{t('onboarding.heading')}</h1>
             </div>
             <div className="w-[180px] shrink-0 overflow-hidden rounded-full bg-[#f4f9f2] p-1 shadow-[0_8px_20px_rgba(46,94,62,0.08)]">
-              <img src="/nutriowl_mascot_full.jpg" alt="NutriOwl mascot" className="h-full w-full object-contain" />
+              <img src="/nutriowl_mascot_full.jpg" alt={t('common.mascotAlt')} className="h-full w-full object-contain" />
             </div>
           </div>
           <p className="relative mt-3 w-full text-[16px] leading-6 text-gray-600">
-            A few details will help NutriOwl personalize your experience.
+            {t('onboarding.intro')}
           </p>
         </div>
 
@@ -154,18 +153,18 @@ export default function Onboarding() {
                 <FiUser size={20} aria-hidden="true" />
               </div>
               <div className="flex-1">
-                <label className="block text-[14px] font-semibold text-darkgreen">1. What’s your name?</label>
+                <label className="block text-[14px] font-semibold text-darkgreen">{t('onboarding.nameLabel')}</label>
                 <input
                   type="text"
                   value={form.name}
                   onChange={(e) => handleField('name', e.target.value)}
                   onBlur={handleBlur}
-                  placeholder="Enter your name"
+                  placeholder={t('onboarding.namePlaceholder')}
                   className="mt-2 w-full border-0 bg-transparent p-0 text-[16px] text-darkgreen placeholder:text-gray-400 focus:outline-none"
                 />
               </div>
             </div>
-            {errors.name && <div className="mt-2 text-xs text-red-600">{errors.name}</div>}
+            {errors.name && <div className="mt-2 text-xs text-red-600">{t(errors.name)}</div>}
           </div>
 
           <div className="rounded-[20px] bg-white px-4 py-3 shadow-[0_6px_18px_rgba(46,94,62,0.08)] ring-1 ring-black/5">
@@ -174,7 +173,7 @@ export default function Onboarding() {
                 <FiMail size={20} aria-hidden="true" />
               </div>
               <div className="flex-1">
-                <label className="block text-[14px] font-semibold text-darkgreen">2. Your account email</label>
+                <label className="block text-[14px] font-semibold text-darkgreen">{t('onboarding.emailLabel')}</label>
                 <input
                   type="email"
                   value={form.email}
@@ -184,7 +183,7 @@ export default function Onboarding() {
                 />
               </div>
             </div>
-            {errors.email && <div className="mt-2 text-xs text-red-600">{errors.email}</div>}
+            {errors.email && <div className="mt-2 text-xs text-red-600">{t(errors.email)}</div>}
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -194,7 +193,7 @@ export default function Onboarding() {
                   <FiCalendar size={20} aria-hidden="true" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <label className="block text-[14px] font-semibold text-darkgreen">3. How old are you?</label>
+                  <label className="block text-[14px] font-semibold text-darkgreen">{t('onboarding.ageLabel')}</label>
                   <div className="mt-2 flex items-center gap-2">
                     <input
                       type="text"
@@ -202,14 +201,14 @@ export default function Onboarding() {
                       value={form.age}
                       onChange={(e) => handleField('age', e.target.value.replace(/[^0-9]/g, ''))}
                       onBlur={handleBlur}
-                      placeholder="e.g. 25"
+                      placeholder={t('onboarding.agePlaceholder')}
                       className="w-full min-w-0 border-0 bg-transparent p-0 text-[12px] text-darkgreen placeholder:text-gray-400 focus:outline-none"
                     />
-                    <span className="text-[12px] text-gray-500">years</span>
+                    <span className="text-[12px] text-gray-500">{t('units.years')}</span>
                   </div>
                 </div>
               </div>
-              {errors.age && <div className="mt-2 text-xs text-red-600">{errors.age}</div>}
+              {errors.age && <div className="mt-2 text-xs text-red-600">{t(errors.age)}</div>}
             </div>
 
             <div className="rounded-[20px] bg-white px-4 py-3 shadow-[0_6px_18px_rgba(46,94,62,0.08)] ring-1 ring-black/5">
@@ -218,7 +217,7 @@ export default function Onboarding() {
                   <FiMaximize2 size={20} aria-hidden="true" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <label className="block text-[14px] font-semibold text-darkgreen">4. What’s your height?</label>
+                  <label className="block text-[14px] font-semibold text-darkgreen">{t('onboarding.heightLabel')}</label>
                   <div className="mt-2 flex items-center gap-2">
                     <input
                       type="text"
@@ -226,14 +225,14 @@ export default function Onboarding() {
                       value={form.height}
                       onChange={(e) => handleField('height', e.target.value.replace(/[^0-9.]/g, ''))}
                       onBlur={handleBlur}
-                      placeholder="e.g. 170"
+                      placeholder={t('onboarding.heightPlaceholder')}
                       className="w-full min-w-0 border-0 bg-transparent p-0 text-[12px] text-darkgreen placeholder:text-gray-400 focus:outline-none"
                     />
-                    <span className="text-[12px] text-gray-500">cm</span>
+                    <span className="text-[12px] text-gray-500">{t('units.cm')}</span>
                   </div>
                 </div>
               </div>
-              {errors.height && <div className="mt-2 text-xs text-red-600">{errors.height}</div>}
+              {errors.height && <div className="mt-2 text-xs text-red-600">{t(errors.height)}</div>}
             </div>
           </div>
 
@@ -243,7 +242,7 @@ export default function Onboarding() {
                 <FiBarChart2 size={20} aria-hidden="true" />
               </div>
               <div className="flex-1">
-                <label className="block text-[14px] font-semibold text-darkgreen">5. What’s your weight?</label>
+                <label className="block text-[14px] font-semibold text-darkgreen">{t('onboarding.weightLabel')}</label>
                 <div className="mt-2 flex items-center gap-2">
                   <input
                     type="text"
@@ -251,54 +250,54 @@ export default function Onboarding() {
                     value={form.weight}
                     onChange={(e) => handleField('weight', e.target.value.replace(/[^0-9.]/g, ''))}
                     onBlur={handleBlur}
-                    placeholder="Enter your weight"
+                    placeholder={t('onboarding.weightPlaceholder')}
                     className="w-full border-0 bg-transparent p-0 text-[16px] text-darkgreen placeholder:text-gray-400 focus:outline-none"
                   />
-                  <span className="text-[12px] text-gray-500">kg</span>
+                  <span className="text-[12px] text-gray-500">{t('units.kg')}</span>
                 </div>
               </div>
             </div>
-            {errors.weight && <div className="mt-2 text-xs text-red-600">{errors.weight}</div>}
+            {errors.weight && <div className="mt-2 text-xs text-red-600">{t(errors.weight)}</div>}
           </div>
 
           <div className="pt-1">
-            <label className="mb-3 block text-[14px] font-semibold text-darkgreen">6. What’s your daily activity level?</label>
+            <label className="mb-3 block text-[14px] font-semibold text-darkgreen">{t('onboarding.activityLabel')}</label>
             <div className="grid grid-cols-3 gap-3">
-              {activityOptions.map((option) => {
-                const selected = form.activityLevel === option.key;
-                const ActivityIcon = activityIcons[option.key];
+              {activityOptions.map((key) => {
+                const selected = form.activityLevel === key;
+                const ActivityIcon = activityIcons[key];
                 return (
                   <button
-                    key={option.key}
+                    key={key}
                     type="button"
-                    onClick={() => handleField('activityLevel', option.key)}
+                    onClick={() => handleField('activityLevel', key)}
                     className={`rounded-[18px] border bg-white px-3 py-4 text-left shadow-[0_6px_18px_rgba(46,94,62,0.08)] transition ${selected ? 'border-green-300 bg-green-50' : 'border-[#dfe8da]'}`}
                   >
                     <div className="mb-3 flex h-16 items-center justify-center">
                       <ActivityIcon className="text-green-700" size={36} aria-hidden="true" />
                     </div>
-                    <div className="text-center text-[14px] font-semibold text-darkgreen">{option.title}</div>
-                    <div className="mt-2 text-center text-[11px] leading-4 text-gray-600">{option.desc}</div>
+                    <div className="text-center text-[14px] font-semibold text-darkgreen">{t(`onboarding.activity.${key}.title`)}</div>
+                    <div className="mt-2 text-center text-[11px] leading-4 text-gray-600">{t(`onboarding.activity.${key}.desc`)}</div>
                   </button>
                 );
               })}
             </div>
-            {errors.activityLevel && <div className="mt-2 text-xs text-red-600">{errors.activityLevel}</div>}
+            {errors.activityLevel && <div className="mt-2 text-xs text-red-600">{t(errors.activityLevel)}</div>}
           </div>
 
           <div className="pt-1">
             <label className="mb-3 block text-[14px] font-semibold text-darkgreen">
-              7. What’s your goal? <span className="font-normal text-gray-500">(Select all that apply)</span>
+              {t('onboarding.goalLabel')} <span className="font-normal text-gray-500">{t('onboarding.selectAll')}</span>
             </label>
             <div className="grid grid-cols-3 gap-3">
-              {goalOptions.map((option) => {
-                const selected = form.goals.includes(option.key);
-                const GoalIcon = goalIcons[option.key];
+              {goalOptions.map((key) => {
+                const selected = form.goals.includes(key);
+                const GoalIcon = goalIcons[key];
                 return (
                   <button
-                    key={option.key}
+                    key={key}
                     type="button"
-                    onClick={() => toggleGoal(option.key)}
+                    onClick={() => toggleGoal(key)}
                     className={`rounded-[18px] border bg-white px-3 py-4 text-left shadow-[0_6px_18px_rgba(46,94,62,0.08)] transition ${selected ? 'border-green-300 bg-green-50' : 'border-[#dfe8da]'}`}
                   >
                     <div className="mb-3 flex h-16 items-center justify-between">
@@ -307,13 +306,13 @@ export default function Onboarding() {
                         ✓
                       </span>
                     </div>
-                    <div className="text-center text-[14px] font-semibold leading-5 text-darkgreen">{option.title}</div>
-                    <div className="mt-2 text-center text-[11px] leading-4 text-gray-600">{option.desc}</div>
+                    <div className="text-center text-[14px] font-semibold leading-5 text-darkgreen">{t(`onboarding.goals.${key}.title`)}</div>
+                    <div className="mt-2 text-center text-[11px] leading-4 text-gray-600">{t(`onboarding.goals.${key}.desc`)}</div>
                   </button>
                 );
               })}
             </div>
-            {errors.goals && <div className="mt-2 text-xs text-red-600">{errors.goals}</div>}
+            {errors.goals && <div className="mt-2 text-xs text-red-600">{t(errors.goals)}</div>}
           </div>
 
           <button
@@ -321,15 +320,15 @@ export default function Onboarding() {
             disabled={saving}
             className="mt-4 flex w-full items-center justify-center rounded-full bg-green-600 px-6 py-4 text-center text-[26px] font-bold text-white shadow-[0_10px_20px_rgba(76,175,80,0.25)] transition hover:bg-green-700 disabled:cursor-wait disabled:opacity-60"
           >
-            <span>{saving ? 'Saving...' : 'Continue'}</span>
+            <span>{saving ? t('onboarding.saving') : t('onboarding.continue')}</span>
             <FiArrowRight className="ml-3" size={24} aria-hidden="true" />
           </button>
-          {submitError && <p className="mt-2 text-center text-sm text-red-600">{submitError}</p>}
+          {submitError && <p className="mt-2 text-center text-sm text-red-600">{submitError.key ? t(submitError.key) : submitError.text}</p>}
         </form>
 
         <div className="mt-4 flex items-center justify-center gap-2 pb-4 text-[12px] text-gray-500">
           <FiLock size={14} aria-hidden="true" />
-          <span>Your information is safe with NutriOwl</span>
+          <span>{t('onboarding.safe')}</span>
         </div>
       </div>
     </div>
