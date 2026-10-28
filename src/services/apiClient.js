@@ -7,19 +7,57 @@ const AUTH_EMAIL_KEY = 'nutriowl_auth_email';
 // The backend gives up on the AI provider after ~25s; allow for that plus network time.
 const CHAT_TIMEOUT_MS = 35000;
 
+const sessionExpiredListeners = new Set();
+// True from the moment a stored token is rejected until the next sign-in, so pages
+// opened afterwards (e.g. chat) can still tell the user why they were signed out.
+let sessionExpired = false;
+
+// The stored token, or '' when there is no usable one. Blank values and the strings
+// "undefined"/"null" count as no token: sending them would always get a 401.
 function authToken() {
-  return localStorage.getItem(AUTH_TOKEN_KEY) || '';
+  const token = (localStorage.getItem(AUTH_TOKEN_KEY) || '').trim();
+  return token && token !== 'undefined' && token !== 'null' ? token : '';
+}
+
+export function isSignedIn() {
+  return Boolean(authToken());
+}
+
+export function wasSessionExpired() {
+  return sessionExpired;
 }
 
 export function getCurrentEmail() {
   return localStorage.getItem(AUTH_EMAIL_KEY) || '';
 }
 
-// Ends the session on this device, including the signed-in user's saved chat.
+// Ends the session on this device, including the signed-in user's saved chat and cached profile.
 export function clearSession() {
   clearChat(getCurrentEmail());
   localStorage.removeItem(AUTH_TOKEN_KEY);
   localStorage.removeItem(AUTH_EMAIL_KEY);
+  profileService.clearProfile();
+}
+
+// Called when the backend rejects a stored token, e.g. so protected pages can redirect to sign-in.
+export function onSessionExpired(listener) {
+  sessionExpiredListeners.add(listener);
+  return () => sessionExpiredListeners.delete(listener);
+}
+
+// A 401 for a token we sent means the session is over. Only act if that token is still the
+// stored one, so several requests failing together clear the session and notify just once.
+function handleRejectedToken(sentToken) {
+  if (authToken() !== sentToken) return;
+  sessionExpired = true;
+  clearSession();
+  sessionExpiredListeners.forEach(listener => {
+    try {
+      listener();
+    } catch (error) {
+      console.warn('Session-expired listener failed', error);
+    }
+  });
 }
 
 // Errors from the API carry the HTTP status so callers can tell 401/429/5xx apart.
@@ -117,14 +155,16 @@ function fallbackRequest(path, options = {}) {
   return undefined;
 }
 
-async function request(path, options = {}) {
+// `auth: false` sends the request without the Authorization header even when signed in.
+async function request(path, { auth = true, ...options } = {}) {
+  const token = auth ? authToken() : '';
   let response;
   try {
     response = await fetch(path, {
       ...options,
       headers: {
         'Content-Type': 'application/json',
-        ...(authToken() ? { Authorization: `Bearer ${authToken()}` } : {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...(options.headers || {})
       }
     });
@@ -136,6 +176,8 @@ async function request(path, options = {}) {
     }
     throw error;
   }
+
+  if (response.status === 401 && token) handleRejectedToken(token);
 
   const responseText = await response.text();
   let body = null;
@@ -152,9 +194,14 @@ async function request(path, options = {}) {
 }
 
 async function startSession(path, email, password) {
-  const result = await request(path, { method: 'POST', body: JSON.stringify({ email, password }) });
+  // Never send a leftover token with a sign-in attempt.
+  const result = await request(path, { method: 'POST', auth: false, body: JSON.stringify({ email, password }) });
+  if (typeof result.token !== 'string' || !result.token) {
+    throw apiError(500, 'The NutriOwl backend returned an unexpected response.');
+  }
   localStorage.setItem(AUTH_TOKEN_KEY, result.token);
   localStorage.setItem(AUTH_EMAIL_KEY, result.profile.email);
+  sessionExpired = false;
   return result.profile;
 }
 
@@ -166,12 +213,13 @@ export function signIn(email, password) {
   return startSession('/api/auth/signin', email, password);
 }
 
+// Signs out locally first, then revokes the token on the server. The revoke bypasses the
+// session-expired handling: a deliberate sign-out shouldn't show an "expired" message.
 export async function signOut() {
-  try {
-    await request('/api/auth/signout', { method: 'POST' });
-  } finally {
-    clearSession();
-  }
+  const token = authToken();
+  clearSession();
+  if (!token) return;
+  await request('/api/auth/signout', { method: 'POST', auth: false, headers: { Authorization: `Bearer ${token}` } });
 }
 
 export function saveProfile(profile) {
@@ -200,10 +248,28 @@ export function updateGoalPreferences(preferences) {
 
 // Sends the conversation (oldest first, newest user message last) and resolves to
 // { response, source } where source is "ai", "fallback" or "safety".
-export function sendChat(messages) {
-  return request('/api/chat', {
+// Chat also works signed out, so if the stored token is rejected (the session is then
+// cleared by request()), the same request is retried once anonymously and the result
+// is flagged with sessionExpired: true.
+export async function sendChat(messages) {
+  const send = auth => request('/api/chat', {
     method: 'POST',
+    auth,
     body: JSON.stringify({ messages: toApiMessages(messages) }),
     signal: AbortSignal.timeout(CHAT_TIMEOUT_MS)
   });
+  const sentToken = isSignedIn();
+  try {
+    return await send(true);
+  } catch (error) {
+    if (error.status !== 401 || !sentToken) throw error;
+    return { ...(await send(false)), sessionExpired: true };
+  }
+}
+
+// Checks a stored token in the background on app start, so a stale one is cleared
+// (via request()'s 401 handling) before it breaks other requests. Never throws.
+export function validateStoredSession() {
+  if (!isSignedIn()) return Promise.resolve();
+  return request('/api/profile').then(() => undefined, () => undefined);
 }

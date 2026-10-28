@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FiLock, FiMail } from 'react-icons/fi';
 import LanguageToggle from '../components/LanguageToggle';
 import { useI18n } from '../i18n/LanguageContext';
@@ -8,6 +8,9 @@ import * as apiClient from '../services/apiClient';
 
 export default function AuthLanding() {
   const navigate = useNavigate();
+  const location = useLocation();
+  // Set when a protected page was redirected here because the session expired.
+  const sessionExpired = Boolean(location.state?.sessionExpired);
   const { t } = useI18n();
   const [mode, setMode] = useState(null);
   const [email, setEmail] = useState('');
@@ -88,6 +91,12 @@ export default function AuthLanding() {
               : t('auth.introSignin')
             : t('auth.intro')}
         </p>
+
+        {sessionExpired && (
+          <p role="status" className="mt-4 rounded-[18px] bg-amber-50 px-4 py-3 text-sm text-amber-900 ring-1 ring-amber-200">
+            {t('auth.sessionExpired')}
+          </p>
+        )}
 
         {!mode ? (
           <div className="mt-7 space-y-3">

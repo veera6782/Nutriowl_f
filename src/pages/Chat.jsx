@@ -24,34 +24,39 @@ export default function Chat() {
   const [messages, setMessages] = useState(() => loadChat(email));
   const [sending, setSending] = useState(false);
   // UI-only notices; never part of the history sent to the API.
-  // { kind: 'limit', text } | { kind: 'error' } | { kind: 'unauthorized' }
+  // { kind: 'limit', text } | { kind: 'error' }
   const [notice, setNotice] = useState(null);
+  // Shown until the user signs in again: their stored token was rejected, so replies aren't personalized.
+  const [signedOut, setSignedOut] = useState(() => apiClient.wasSessionExpired());
   const listRef = useRef(null);
 
   useEffect(() => {
     saveChat(email, messages);
   }, [email, messages]);
 
+  // A rejected token (from a chat request or the startup check) has already cleared the
+  // session and this user's saved chat. Keep chatting as a guest and say so.
+  useEffect(() => apiClient.onSessionExpired(() => {
+    setEmail('');
+    setSignedOut(true);
+  }), []);
+
   useEffect(() => {
     if (!listRef.current) return;
     listRef.current.scrollTop = listRef.current.scrollHeight;
-  }, [messages, sending, notice]);
+  }, [messages, sending, notice, signedOut]);
 
   async function requestReply(history) {
     setSending(true);
     setNotice(null);
     try {
-      const { response, source } = await apiClient.sendChat(history);
+      const { response, source, sessionExpired } = await apiClient.sendChat(history);
       setMessages(current => [...current, makeMessage('assistant', response, source)]);
+      // The reply came from an anonymous retry after the stored token was rejected.
+      if (sessionExpired) setSignedOut(true);
     } catch (error) {
       if (error.status === 429) {
         setNotice({ kind: 'limit', text: error.message });
-      } else if (error.status === 401) {
-        // Same as signing out: the session and this user's saved chat are cleared.
-        apiClient.clearSession();
-        setEmail('');
-        setMessages([]);
-        setNotice({ kind: 'unauthorized' });
       } else {
         console.error('NutriOwl chat request failed', error);
         setNotice({ kind: 'error' });
@@ -76,7 +81,6 @@ export default function Chat() {
   let noticeText = null;
   if (notice?.kind === 'limit') noticeText = language === 'en' && notice.text ? notice.text : t('chat.dailyLimit');
   if (notice?.kind === 'error') noticeText = t('chat.networkError');
-  if (notice?.kind === 'unauthorized') noticeText = t('chat.sessionExpired');
 
   return (
     <div className="h-dvh overflow-hidden bg-cream">
@@ -123,17 +127,20 @@ export default function Chat() {
               <ChatMessage key={m.id} message={m} />
             ))}
             {sending && <TypingIndicator />}
+            {signedOut && (
+              <p role="status" className="mx-auto mb-4 max-w-[90%] rounded-full bg-gray-100 px-4 py-2 text-center text-xs text-gray-600">
+                {t('chat.signedOut')}{' '}
+                <button type="button" onClick={() => navigate('/')} className="font-medium text-green-700 underline">
+                  {t('chat.signIn')}
+                </button>
+              </p>
+            )}
             {notice && (
               <div role="alert" className="mx-auto mb-4 max-w-[90%] rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-center text-sm text-red-800">
                 <p>{noticeText}</p>
                 {notice.kind === 'error' && (
                   <button type="button" onClick={() => requestReply(messages)} className="mt-2 rounded-full bg-white px-4 py-1.5 font-medium text-red-800 shadow-sm ring-1 ring-red-200">
                     {t('chat.retry')}
-                  </button>
-                )}
-                {notice.kind === 'unauthorized' && (
-                  <button type="button" onClick={() => navigate('/')} className="mt-2 rounded-full bg-[#4CAF50] px-4 py-1.5 font-medium text-white shadow-sm">
-                    {t('chat.signIn')}
                   </button>
                 )}
               </div>
