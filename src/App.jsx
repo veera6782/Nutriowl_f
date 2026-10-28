@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import FoodScanner from './pages/FoodScanner';
 import Goals from './pages/Goals';
 import Home from './pages/Home';
-import Chat from './pages/Chat';
 import Profile from './pages/Profile';
 import History from './pages/History';
 import Onboarding from './pages/Onboarding';
 import AuthLanding from './pages/AuthLanding';
+
+// Chat pulls in the Markdown renderer, so it loads only when opened.
+const Chat = lazy(() => import('./pages/Chat'));
 
 function StartupGate() {
   return <AuthLanding />;
@@ -23,7 +25,7 @@ export default function App() {
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/scan" element={<FoodScanner />} />
           <Route path="/goals" element={<Goals />} />
-          <Route path="/chat" element={<Chat />} />
+          <Route path="/chat" element={<Suspense fallback={null}><Chat /></Suspense>} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/history" element={<History />} />
           <Route path="*" element={<Navigate to="/" replace />} />
